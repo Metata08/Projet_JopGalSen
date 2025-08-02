@@ -1,0 +1,58 @@
+# Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+max_line_length = 100
+trim_trailing_whitespace = true
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+
+[*.{diff,md}]
+trim_trailing_whitespace = false
+
+[*.{ts,js,json,yml,yaml}]
+indent_size = 2
+
+[*.java]
+indent_size = 4
+
+[*.{xml,html}]
+indent_size = 2
+
+[*.{scss,css}]
+indent_size = 2
+
+[*.{cmd,sh}]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[Dockerfile*]
+indent_style = tab
+
+[.github/**/*.yml]
+indent_size = 2
+
+[.vscode/*.json]
+indent_size = 2
+
+[.browserslistrc]
+indent_style = space
+indent_size = 2
+
+[.prettierrc]
+indent_style = space
+indent_size = 2
+
+[.eslintrc.json]
+indent_style = space
+indent_size = 2

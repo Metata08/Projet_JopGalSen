@@ -1,0 +1,56 @@
+{
+  "name": "jopsenegal",
+  "version": "1.0.0",
+  "description": "JobSénégal - Plateforme de recherche d'emploi pour le Sénégal",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "start": "npm-run-all --parallel start:backend start:frontend",
+    "start:backend": "cd backend && mvn spring-boot:run",
+    "start:frontend": "cd frontend && npm start",
+    "build": "npm-run-all build:backend build:frontend",
+    "build:backend": "cd backend && mvn clean package -DskipTests",
+    "build:frontend": "cd frontend && npm run build",
+    "test": "npm-run-all test:backend test:frontend",
+    "test:backend": "cd backend && mvn test",
+    "test:frontend": "cd frontend && npm test",
+    "lint": "npm-run-all lint:backend lint:frontend",
+    "lint:backend": "cd backend && mvn checkstyle:check",
+    "lint:frontend": "cd frontend && npm run lint",
+    "format": "npm-run-all format:backend format:frontend",
+    "format:backend": "cd backend && mvn spotless:apply",
+    "format:frontend": "cd frontend && npm run format",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:restart": "npm run docker:down && npm run docker:up",
+    "docker:logs": "docker-compose logs -f",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "husky": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/votre-utilisateur/jopsenegal.git"
+  },
+  "keywords": [
+    "emploi",
+    "sénégal",
+    "job",
+    "angular",
+    "spring-boot"
+  ],
+  "author": "Équipe JobSénégal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/votre-utilisateur/jopsenegal/issues"
+  },
+  "homepage": "https://github.com/votre-utilisateur/jopsenegal#readme"
+}

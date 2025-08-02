@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # Base de données PostgreSQL
+  postgres:
+    image: postgres:14-alpine
+    container_name: jopsenegal-db
+    environment:
+      POSTGRES_DB: jopsenegal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Interface d'administration pour PostgreSQL
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: jopsenegal-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@jopsenegal.sn
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Redis pour le cache (optionnel)
+  redis:
+    image: redis:7-alpine
+    container_name: jopsenegal-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass "${REDIS_PASSWORD:-redispass}"
+    volumes:
+      - redis_data:/data
+
+  # MailHog pour le développement (capture les emails)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: jopsenegal-mailhog
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
+
+  # Backend Spring Boot
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: jopsenegal-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev,docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/jopsenegal
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_MAIL_HOST=mailhog
+      - SPRING_MAIL_PORT=1025
+      - JWT_SECRET=dev-secret-change-in-production
+      - JWT_EXPIRATION=86400000
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redispass}
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mailhog:
+        condition: service_started
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: jopsenegal-frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+
+# Volumes pour la persistance des données
+volumes:
+  postgres_data:
+  redis_data:
+
+# Réseau personnalisé pour une meilleure isolation
+networks:
+  default:
+    name: jopsenegal-network
+    driver: bridge

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmploiSenegal | Plateforme pour jeunes talents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2F80ED;
+            --secondary: #EB5757;
+            --accent: #F2C94C;
+            --dark: #1A1A1A;
+            --light: #F8F9FA;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8F9FA;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #2F80ED 0%, #56CCF2 100%);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transition-smooth {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2F80ED;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl">ES</div>
+                <span class="text-xl font-bold text-gray-800">Emploi<span class="text-blue-600">Sénégal</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-smooth">Accueil</a>
+                <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-smooth">Offres</a>
+                <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-smooth">Entreprises</a>
+                <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-smooth">Ressources</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="hidden md:block px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-smooth">
+                    Connexion
+                </button>
+                <button class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-smooth">
+                    S'inscrire
+                </button>
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Trouvez l'emploi de vos rêves au Sénégal</h1>
+                <p class="text-xl mb-10 opacity-90">Connectez-vous avec les meilleures entreprises locales et internationales. Des opportunités pour jeunes diplômés et professionnels.</p>
+                
+                <!-- Search Bar -->
+                <div class="bg-white rounded-lg shadow-xl p-2 flex flex-col md:flex-row">
+                    <div class="flex-1 flex items-center px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200">
+                        <i class="fas fa-search text-gray-400 mr-3"></i>
+                        <input type="text" placeholder="Mots-clés, compétences, postes..." class="w-full outline-none text-gray-700">
+                    </div>
+                    <div class="flex-1 flex items-center px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200">
+                        <i class="fas fa-map-marker-alt text-gray-400 mr-3"></i>
+                        <input type="text" placeholder="Dakar, Thiès, Saint-Louis..." class="w-full outline-none text-gray-700">
+                    </div>
+                    <button class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-smooth">
+                        Rechercher
+                    </button>
+                </div>
+                
+                <div class="mt-6 flex flex-wrap justify-center gap-2">
+                    <span class="text-sm opacity-80">Suggestions :</span>
+                    <a href="#" class="text-sm bg-white bg-opacity-10 px-3 py-1 rounded-full hover:bg-opacity-20 transition-smooth">Développeur</a>
+                    <a href="#" class="text-sm bg-white bg-opacity-10 px-3 py-1 rounded-full hover:bg-opacity-20 transition-smooth">Marketing</a>
+                    <a href="#" class="text-sm bg-white bg-opacity-10 px-3 py-1 rounded-full hover:bg-opacity-20 transition-smooth">Ingénieur</a>
+                    <a href="#" class="text-sm bg-white bg-opacity-10 px-3 py-1 rounded-full hover:bg-opacity-20 transition-smooth">Finance</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Explorez par catégories</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Trouvez des opportunités dans votre domaine de prédilection</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-smooth cursor-pointer">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-laptop-code text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium">Technologie</h3>
+                    <p class="text-sm text-gray-500 mt-1">125 offres</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-smooth cursor-pointer">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium">Finance</h3>
+                    <p class="text-sm text-gray-500 mt-1">89 offres</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-smooth cursor-pointer">
+                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bullhorn text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium">Marketing</h3>
+                    <p class="text-sm text-gray-500 mt-1">76 offres</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-smooth cursor-pointer">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-graduation-cap text-yellow-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium">Éducation</h3>
+                    <p class="text-sm text-gray-500 mt-1">54 offres</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-smooth cursor-pointer">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heartbeat text-red-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium">Santé</h3>
+                    <p class="text-sm text-gray-500 mt-1">42 offres</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition-smooth cursor-pointer">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-hammer text-indigo-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-medium">Ingénierie</h3>
+                    <p class="text-sm text-gray-500 mt-1">67 offres</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Jobs Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Offres récentes</h2>
+                    <p class="text-gray-600">Les dernières opportunités publiées</p>
+                </div>
+                <button class="mt-4 md:mt-0 px-6 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-smooth">
+                    Voir toutes les offres
+                </button>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Job Card 1 -->
+                <div class="job-card bg-white rounded-xl shadow-sm p-6 transition-smooth">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-laptop-code text-blue-600 text-xl"></i>
+                        </div>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Nouveau</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Développeur Fullstack</h3>
+                    <p class="text-gray-600 mb-4">Orange Sénégal • Dakar</p>
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">JavaScript</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">React</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">Node.js</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-blue-600">1.5M - 2M XOF</span>
+                        <button class="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-smooth">
+                            Postuler
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Job Card 2 -->
+                <div class="job-card bg-white rounded-xl shadow-sm p-6 transition-smooth">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                            <i class="fas fa-bullhorn text-purple-600 text-xl"></i>
+                        </div>
+                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Urgent</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Responsable Marketing</h3>
+                    <p class="text-gray-600 mb-4">Jumia Sénégal • Dakar</p>
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">Digital</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">Stratégie</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">CRM</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-blue-600">1.2M - 1.8M XOF</span>
+                        <button class="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-smooth">
+                            Postuler
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Job Card 3 -->
+                <div class="job-card bg-white rounded-xl shadow-sm p-6 transition-smooth">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                        </div>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Remote</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Analyste Financier</h3>
+                    <p class="text-gray-600 mb-4">Ecobank • Dakar</p>
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">Excel</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">Tableau</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">Comptabilité</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-blue-600">1.8M - 2.5M XOF</span>
+                        <button class="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-smooth">
+                            Postuler
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Comment ça marche ?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Trouver un emploi n'a jamais été aussi simple</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center px-6">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">1. Créez votre profil</h3>
+                    <p class="text-gray-600">Inscrivez-vous en quelques minutes et complétez votre profil avec vos compétences et expériences.</p>
+                </div>
+                
+                <div class="text-center px-6">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-search text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">2. Trouvez des offres</h3>
+                    <p class="text-gray-600">Utilisez notre moteur de recherche intelligent pour trouver des emplois correspondant à votre profil.</p>
+                </div>
+                
+                <div class="text-center px-6">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-paper-plane text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">3. Postulez facilement</h3>
+                    <p class="text-gray-600">Postulez en un clic et suivez l'état de vos candidatures depuis votre tableau de bord.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Ils ont trouvé un emploi</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Découvrez les témoignages de nos utilisateurs satisfaits</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Aminata Diop</h4>
+                            <p class="text-sm text-gray-500">Développeuse chez Sonatel</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Grâce à EmploiSénégal, j'ai trouvé mon premier emploi dans une grande entreprise juste après mon diplôme. La plateforme est très intuitive et les recruteurs sont réactifs."</p>
+                    <div class="mt-4 flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-green-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Mamadou Ndiaye</h4>
+                            <p class="text-sm text-gray-500">Responsable Marketing</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Je cherchais une nouvelle opportunité dans le marketing digital. En 2 semaines sur EmploiSénégal, j'ai eu 3 entretiens et j'ai été embauché par une startup prometteuse."</p>
+                    <div class="mt-4 flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Fatou Bâ</h4>
+                            <p class="text-sm text-gray-500">Analyste Financière</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"La qualité des offres sur EmploiSénégal est excellente. J'ai pu négocier un salaire 30% plus élevé que mon précédent poste grâce aux informations disponibles sur la plateforme."</p>
+                    <div class="mt-4 flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 gradient-bg text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Prêt à trouver l'emploi de vos rêves ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">Rejoignez des milliers de jeunes sénégalais qui ont boosté leur carrière grâce à notre plateforme.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="px-8 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-smooth">
+                    Créer un compte
+                </button>
+                <button class="px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:bg-opacity-10 transition-smooth">
+                    Explorer les offres
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl">ES</div>
+                        <span class="text-xl font-bold text-white">Emploi<span class="text-blue-400">Sénégal</span></span>
+                    </div>
+                    <p class="mb-4">La plateforme de référence pour l'emploi des jeunes talents sénégalais.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-smooth">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-smooth">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-smooth">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-smooth">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-white font-bold mb-4">Candidats</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition-smooth">Trouver un emploi</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Créer un profil</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Alertes emploi</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Conseils carrière</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-white font-bold mb-4">Recruteurs</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition-smooth">Publier une offre</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Trouver des talents</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Solutions entreprises</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Tarifs</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-white font-bold mb-4">Ressources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition-smooth">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Centre d'aide</a></li>
+                        <li><a href="#" class="hover:text-white transition-smooth">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm mb-4 md:mb-0">© 2025 EmploiSénégal. Tous droits réservés.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-sm hover:text-white transition-smooth">Confidentialité</a>
+                    <a href="#" class="text-sm hover:text-white transition-smooth">Conditions</a>
+                    <a href="#" class="text-sm hover:text-white transition-smooth">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal (hidden by default) -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl max-w-md w-full mx-4 p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Connexion</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">Mot de passe</label>
+                    <input type="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-smooth mb-4">
+                    Se connecter
+                </button>
+                
+                <div class="text-center">
+                    <a href="#" class="text-blue-600 hover:underline">Mot de passe oublié ?</a>
+                    <p class="text-gray-600 mt-4">Pas encore membre ? <a href="#" class="text-blue-600 hover:underline">S'inscrire</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        document.querySelector('.md\\:hidden button').addEventListener('click', function() {
+            // This would toggle a mobile menu in a real implementation
+            alert("Menu mobile ouvert - À implémenter");
+        });
+        
+        // Login modal toggle
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+        
+        document.querySelector('header button:nth-of-type(1)').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginModal.classList.remove('hidden');
+        });
+        
+        closeModal.addEventListener('click', function() {
+            loginModal.classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside
+        loginModal.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.classList.add('hidden');
+            }
+        });
+        
+        // Job card hover effect
+        document.querySelectorAll('.job-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>
