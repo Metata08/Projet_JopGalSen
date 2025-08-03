@@ -1,0 +1,11 @@
+id;message;type_notif
+1;../fake-data/blob/hipster.txt;INFO
+2;../fake-data/blob/hipster.txt;WARNING
+3;../fake-data/blob/hipster.txt;WARNING
+4;../fake-data/blob/hipster.txt;INFO
+5;../fake-data/blob/hipster.txt;INFO
+6;../fake-data/blob/hipster.txt;ALERT
+7;../fake-data/blob/hipster.txt;ALERT
+8;../fake-data/blob/hipster.txt;ALERT
+9;../fake-data/blob/hipster.txt;INFO
+10;../fake-data/blob/hipster.txt;WARNING

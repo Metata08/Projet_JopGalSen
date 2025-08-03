@@ -1,0 +1,195 @@
+<div>
+  <h2 id="page-heading" data-cy="OffreHeading">
+    <span jhiTranslate="jobCalsenApp.offre.home.title">Offres</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="jobCalsenApp.offre.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-offre"
+        [routerLink]="['/offre/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="jobCalsenApp.offre.home.createLabel">Créer un nouveau Offre</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (offres().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="jobCalsenApp.offre.home.notFound">Aucun Offre trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="title">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.title">Title</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="company">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.company">Company</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="location">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.location">Location</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.type">Type</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="salary">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.salary">Salary</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.description">Description</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="skills">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.skills">Skills</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="experienceLevel">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.experienceLevel">Experience Level</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="postedDate">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.postedDate">Posted Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="recruteur.id">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.recruteur">Recruteur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="poste.id">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.offre.poste">Poste</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (offre of offres(); track trackId(offre)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/offre', offre.id, 'view']">{{ offre.id }}</a>
+              </td>
+              <td>{{ offre.title }}</td>
+              <td>{{ offre.company }}</td>
+              <td>{{ offre.location }}</td>
+              <td [jhiTranslate]="'jobCalsenApp.TypeContrat.' + (offre.type ?? 'null')">
+                {{ { null: '', CDD: 'CDD', CDI: 'CDI', STAGE: 'STAGE' }[offre.type ?? 'null'] }}
+              </td>
+              <td>{{ offre.salary }}</td>
+              <td>{{ offre.description }}</td>
+              <td>{{ offre.skills }}</td>
+              <td>{{ offre.experienceLevel }}</td>
+              <td>{{ offre.postedDate | formatMediumDatetime }}</td>
+              <td>
+                @if (offre.recruteur) {
+                  <div>
+                    <a [routerLink]="['/recruteur', offre.recruteur.id, 'view']">{{ offre.recruteur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (offre.poste) {
+                  <div>
+                    <a [routerLink]="['/poste', offre.poste.id, 'view']">{{ offre.poste.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/offre', offre.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/offre', offre.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(offre)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (offres().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

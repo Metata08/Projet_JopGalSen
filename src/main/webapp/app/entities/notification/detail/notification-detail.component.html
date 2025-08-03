@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (notification(); as notificationRef) {
+      <div>
+        <h2 data-cy="notificationDetailsHeading"><span jhiTranslate="jobCalsenApp.notification.detail.title">Notification</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ notificationRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.notification.message">Message</span></dt>
+          <dd>
+            <span>{{ notificationRef.message }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.notification.typeNotif">Type Notif</span></dt>
+          <dd>
+            <span [jhiTranslate]="'jobCalsenApp.TypeNotification.' + (notificationRef.typeNotif ?? 'null')">{{
+              { null: '', INFO: 'INFO', ALERT: 'ALERT', WARNING: 'WARNING' }[notificationRef.typeNotif ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.notification.user">User</span></dt>
+          <dd>
+            @if (notification()!.user) {
+              <div>
+                <a [routerLink]="['/users', notification()!.user?.id, 'view']">{{ notificationRef.user?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/notification', notificationRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

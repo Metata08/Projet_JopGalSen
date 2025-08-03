@@ -2,7 +2,9 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
     <property name="now" value="now()" dbms="mysql"/>
     <property name="floatType" value="float" dbms="mysql"/>
     <property name="clobType" value="clob" dbms="mysql"/>
@@ -11,8 +13,24 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
     <property name="timeType" value="time(6)" dbms="mysql"/>
 
+    <!-- Inclusion du schéma initial -->
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20250801005713_added_entity_Domaine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005714_added_entity_Poste.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005715_added_entity_Offre.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005716_added_entity_Notification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005717_added_entity_Users.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005718_added_entity_Visiteur.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005719_added_entity_Recruteur.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801230711_added_entity_Candidature.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+
+    <include file="config/liquibase/changelog/20250801005714_added_entity_constraints_Poste.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005715_added_entity_constraints_Offre.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005716_added_entity_constraints_Notification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801005717_added_entity_constraints_Users.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250801230711_added_entity_constraints_Candidature.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+
 </databaseChangeLog>

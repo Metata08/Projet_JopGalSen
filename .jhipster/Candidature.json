@@ -1,0 +1,37 @@
+{
+  "annotations": {
+    "changelogDate": "20250801230711"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "motivationLetter",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "cvFileUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateCandidature",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Candidature",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "visiteur",
+      "relationshipName": "visiteur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "offre",
+      "relationshipName": "offre",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20250801005714"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "nomPoste",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Poste",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "offre",
+      "otherEntityRelationshipName": "poste",
+      "relationshipName": "offres",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "domaine",
+      "otherEntityRelationshipName": "postes",
+      "relationshipName": "domaine",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

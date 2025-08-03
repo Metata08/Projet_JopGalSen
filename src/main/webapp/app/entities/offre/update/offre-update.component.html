@@ -1,0 +1,160 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-offre-heading" data-cy="OffreCreateUpdateHeading" jhiTranslate="jobCalsenApp.offre.home.createOrEditLabel">
+        Créer ou éditer un Offre
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="jobCalsenApp.offre.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let titleRef = editForm.get('title')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_title" jhiTranslate="jobCalsenApp.offre.title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          @if (titleRef.invalid && (titleRef.dirty || titleRef.touched)) {
+            <div>
+              @if (editForm.get('title')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let companyRef = editForm.get('company')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_company" jhiTranslate="jobCalsenApp.offre.company">Company</label>
+          <input type="text" class="form-control" name="company" id="field_company" data-cy="company" formControlName="company" />
+          @if (companyRef.invalid && (companyRef.dirty || companyRef.touched)) {
+            <div>
+              @if (editForm.get('company')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_location" jhiTranslate="jobCalsenApp.offre.location">Location</label>
+          <input type="text" class="form-control" name="location" id="field_location" data-cy="location" formControlName="location" />
+        </div>
+
+        @let typeRef = editForm.get('type')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_type" jhiTranslate="jobCalsenApp.offre.type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'jobCalsenApp.TypeContrat.null' | translate }}</option>
+            @for (typeContrat of typeContratValues; track $index) {
+              <option [value]="typeContrat">{{ 'jobCalsenApp.TypeContrat.' + typeContrat | translate }}</option>
+            }
+          </select>
+          @if (typeRef.invalid && (typeRef.dirty || typeRef.touched)) {
+            <div>
+              @if (editForm.get('type')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_salary" jhiTranslate="jobCalsenApp.offre.salary">Salary</label>
+          <input type="text" class="form-control" name="salary" id="field_salary" data-cy="salary" formControlName="salary" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description" jhiTranslate="jobCalsenApp.offre.description">Description</label>
+          <textarea
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_skills" jhiTranslate="jobCalsenApp.offre.skills">Skills</label>
+          <input type="text" class="form-control" name="skills" id="field_skills" data-cy="skills" formControlName="skills" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_experienceLevel" jhiTranslate="jobCalsenApp.offre.experienceLevel">Experience Level</label>
+          <input
+            type="text"
+            class="form-control"
+            name="experienceLevel"
+            id="field_experienceLevel"
+            data-cy="experienceLevel"
+            formControlName="experienceLevel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_postedDate" jhiTranslate="jobCalsenApp.offre.postedDate">Posted Date</label>
+          <div class="d-flex">
+            <input
+              id="field_postedDate"
+              data-cy="postedDate"
+              type="datetime-local"
+              class="form-control"
+              name="postedDate"
+              formControlName="postedDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_recruteur" jhiTranslate="jobCalsenApp.offre.recruteur">Recruteur</label>
+          <select
+            class="form-control"
+            id="field_recruteur"
+            data-cy="recruteur"
+            name="recruteur"
+            formControlName="recruteur"
+            [compareWith]="compareRecruteur"
+          >
+            <option [ngValue]="null"></option>
+            @for (recruteurOption of recruteursSharedCollection; track $index) {
+              <option [ngValue]="recruteurOption">{{ recruteurOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_poste" jhiTranslate="jobCalsenApp.offre.poste">Poste</label>
+          <select class="form-control" id="field_poste" data-cy="poste" name="poste" formControlName="poste" [compareWith]="comparePoste">
+            <option [ngValue]="null"></option>
+            @for (posteOption of postesSharedCollection; track $index) {
+              <option [ngValue]="posteOption">{{ posteOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

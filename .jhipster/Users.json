@@ -1,0 +1,61 @@
+{
+  "annotations": {
+    "changelogDate": "20250801005717"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "password",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "Roles",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "Candidate,Recruiter,Admin"
+    },
+    {
+      "fieldName": "telephone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "entreprise",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Users",
+  "relationships": [
+    {
+      "otherEntityName": "visiteur",
+      "otherEntityRelationshipName": "user",
+      "relationshipName": "visiteur",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "recruteur",
+      "otherEntityRelationshipName": "user",
+      "relationshipName": "recruteur",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "notification",
+      "otherEntityRelationshipName": "user",
+      "relationshipName": "notifications",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

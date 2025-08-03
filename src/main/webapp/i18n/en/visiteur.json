@@ -1,0 +1,25 @@
+{
+  "jobCalsenApp": {
+    "visiteur": {
+      "home": {
+        "title": "Visiteurs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Visiteur",
+        "createOrEditLabel": "Create or edit a Visiteur",
+        "notFound": "No Visiteurs found"
+      },
+      "created": "A new Visiteur is created with identifier {{ param }}",
+      "updated": "A Visiteur is updated with identifier {{ param }}",
+      "deleted": "A Visiteur is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Visiteur {{ id }}?"
+      },
+      "detail": {
+        "title": "Visiteur"
+      },
+      "id": "ID",
+      "cv": "Cv",
+      "user": "User"
+    }
+  }
+}

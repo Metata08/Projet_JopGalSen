@@ -1,0 +1,84 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (offre(); as offreRef) {
+      <div>
+        <h2 data-cy="offreDetailsHeading"><span jhiTranslate="jobCalsenApp.offre.detail.title">Offre</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ offreRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.title">Title</span></dt>
+          <dd>
+            <span>{{ offreRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.company">Company</span></dt>
+          <dd>
+            <span>{{ offreRef.company }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.location">Location</span></dt>
+          <dd>
+            <span>{{ offreRef.location }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.type">Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'jobCalsenApp.TypeContrat.' + (offreRef.type ?? 'null')">{{
+              { null: '', CDD: 'CDD', CDI: 'CDI', STAGE: 'STAGE' }[offreRef.type ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.salary">Salary</span></dt>
+          <dd>
+            <span>{{ offreRef.salary }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.description">Description</span></dt>
+          <dd>
+            <span>{{ offreRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.skills">Skills</span></dt>
+          <dd>
+            <span>{{ offreRef.skills }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.experienceLevel">Experience Level</span></dt>
+          <dd>
+            <span>{{ offreRef.experienceLevel }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.postedDate">Posted Date</span></dt>
+          <dd>
+            <span>{{ offreRef.postedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.recruteur">Recruteur</span></dt>
+          <dd>
+            @if (offre()!.recruteur) {
+              <div>
+                <a [routerLink]="['/recruteur', offre()!.recruteur?.id, 'view']">{{ offreRef.recruteur?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.offre.poste">Poste</span></dt>
+          <dd>
+            @if (offre()!.poste) {
+              <div>
+                <a [routerLink]="['/poste', offre()!.poste?.id, 'view']">{{ offreRef.poste?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/offre', offreRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

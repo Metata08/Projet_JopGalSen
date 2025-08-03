@@ -1,0 +1,109 @@
+entity Domaine {
+  nomDomaine String required
+}
+
+entity Poste {
+  nomPoste String required
+}
+
+entity Offre {
+  title String required
+  company String required
+  location String
+  type TypeContrat required
+  salary String
+  description TextBlob
+  skills String
+  experienceLevel String
+  postedDate Instant
+}
+
+entity Notification {
+  message TextBlob
+  typeNotif TypeNotification
+}
+
+entity Candidature {
+  motivationLetter TextBlob
+  cvFileUrl String
+  dateCandidature Instant
+}
+
+enum TypeContrat {
+  CDD,
+  CDI,
+  STAGE
+}
+
+enum TypeNotification {
+  INFO,
+  ALERT,
+  WARNING
+}
+
+enum Roles {
+  Candidate,
+  Recruiter,
+  Admin
+}
+
+enum TypeRecruteur {
+  PARTICULIER,
+  ENTREPRISE
+}
+
+entity Users {
+  email String required
+  password String required
+  name String
+  role Roles required
+  telephone String
+  entreprise String
+}
+
+entity Visiteur {
+  cv String
+}
+
+entity Recruteur {
+  type TypeRecruteur required
+}
+
+relationship OneToMany {
+  Domaine{postes} to Poste{domaine}
+}
+
+relationship OneToMany {
+  Recruteur{offres} to Offre{recruteur}
+}
+
+relationship OneToMany {
+  Users{notifications} to Notification{user}
+}
+
+relationship OneToMany {
+  Poste{offres} to Offre{poste}
+}
+
+relationship OneToOne {
+  Users{visiteur} to Visiteur{user}
+}
+
+relationship OneToOne {
+  Users{recruteur} to Recruteur{user}
+}
+
+relationship ManyToOne {
+  Candidature{visiteur} to Visiteur
+}
+
+relationship ManyToOne {
+  Candidature{offre} to Offre
+}
+
+paginate Offre with pagination
+
+paginate Poste with pagination
+paginate Domaine with pagination
+paginate Notification with pagination
+paginate Candidature with pagination

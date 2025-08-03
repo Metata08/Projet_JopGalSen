@@ -1,0 +1,25 @@
+{
+  "annotations": {
+    "changelogDate": "20250801005713"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "nomDomaine",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Domaine",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "poste",
+      "otherEntityRelationshipName": "domaine",
+      "relationshipName": "postes",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

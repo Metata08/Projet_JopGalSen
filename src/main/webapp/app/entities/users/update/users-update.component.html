@@ -1,0 +1,136 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-users-heading" data-cy="UsersCreateUpdateHeading" jhiTranslate="jobCalsenApp.users.home.createOrEditLabel">
+        Créer ou éditer un Users
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="jobCalsenApp.users.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let emailRef = editForm.get('email')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_email" jhiTranslate="jobCalsenApp.users.email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+            <div>
+              @if (editForm.get('email')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let passwordRef = editForm.get('password')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_password" jhiTranslate="jobCalsenApp.users.password">Password</label>
+          <input type="text" class="form-control" name="password" id="field_password" data-cy="password" formControlName="password" />
+          @if (passwordRef.invalid && (passwordRef.dirty || passwordRef.touched)) {
+            <div>
+              @if (editForm.get('password')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_name" jhiTranslate="jobCalsenApp.users.name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        @let roleRef = editForm.get('role')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_role" jhiTranslate="jobCalsenApp.users.role">Role</label>
+          <select class="form-control" name="role" formControlName="role" id="field_role" data-cy="role">
+            <option [ngValue]="null">{{ 'jobCalsenApp.Roles.null' | translate }}</option>
+            @for (roles of rolesValues; track $index) {
+              <option [value]="roles">{{ 'jobCalsenApp.Roles.' + roles | translate }}</option>
+            }
+          </select>
+          @if (roleRef.invalid && (roleRef.dirty || roleRef.touched)) {
+            <div>
+              @if (editForm.get('role')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_telephone" jhiTranslate="jobCalsenApp.users.telephone">Telephone</label>
+          <input type="text" class="form-control" name="telephone" id="field_telephone" data-cy="telephone" formControlName="telephone" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_entreprise" jhiTranslate="jobCalsenApp.users.entreprise">Entreprise</label>
+          <input
+            type="text"
+            class="form-control"
+            name="entreprise"
+            id="field_entreprise"
+            data-cy="entreprise"
+            formControlName="entreprise"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_visiteur" jhiTranslate="jobCalsenApp.users.visiteur">Visiteur</label>
+          <select
+            class="form-control"
+            id="field_visiteur"
+            data-cy="visiteur"
+            name="visiteur"
+            formControlName="visiteur"
+            [compareWith]="compareVisiteur"
+          >
+            <option [ngValue]="null"></option>
+            @for (visiteurOption of visiteursCollection; track $index) {
+              <option [ngValue]="visiteurOption">{{ visiteurOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_recruteur" jhiTranslate="jobCalsenApp.users.recruteur">Recruteur</label>
+          <select
+            class="form-control"
+            id="field_recruteur"
+            data-cy="recruteur"
+            name="recruteur"
+            formControlName="recruteur"
+            [compareWith]="compareRecruteur"
+          >
+            <option [ngValue]="null"></option>
+            @for (recruteurOption of recruteursCollection; track $index) {
+              <option [ngValue]="recruteurOption">{{ recruteurOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

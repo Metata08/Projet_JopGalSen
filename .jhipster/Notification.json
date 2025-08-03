@@ -1,0 +1,29 @@
+{
+  "annotations": {
+    "changelogDate": "20250801005716"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "message",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "typeNotif",
+      "fieldType": "TypeNotification",
+      "fieldValues": "INFO,ALERT,WARNING"
+    }
+  ],
+  "name": "Notification",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "users",
+      "otherEntityRelationshipName": "notifications",
+      "relationshipName": "user",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

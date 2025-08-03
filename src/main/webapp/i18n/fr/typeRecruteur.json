@@ -1,0 +1,9 @@
+{
+  "jobCalsenApp": {
+    "TypeRecruteur": {
+      "null": "",
+      "PARTICULIER": "PARTICULIER",
+      "ENTREPRISE": "ENTREPRISE"
+    }
+  }
+}

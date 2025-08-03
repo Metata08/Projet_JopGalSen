@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (recruteur(); as recruteurRef) {
+      <div>
+        <h2 data-cy="recruteurDetailsHeading"><span jhiTranslate="jobCalsenApp.recruteur.detail.title">Recruteur</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ recruteurRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.recruteur.type">Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'jobCalsenApp.TypeRecruteur.' + (recruteurRef.type ?? 'null')">{{
+              { null: '', PARTICULIER: 'PARTICULIER', ENTREPRISE: 'ENTREPRISE' }[recruteurRef.type ?? 'null']
+            }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/recruteur', recruteurRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

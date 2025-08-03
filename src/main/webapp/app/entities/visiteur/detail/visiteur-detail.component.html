@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (visiteur(); as visiteurRef) {
+      <div>
+        <h2 data-cy="visiteurDetailsHeading"><span jhiTranslate="jobCalsenApp.visiteur.detail.title">Visiteur</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ visiteurRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.visiteur.cv">Cv</span></dt>
+          <dd>
+            <span>{{ visiteurRef.cv }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/visiteur', visiteurRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,67 @@
+{
+  "annotations": {
+    "changelogDate": "20250801005715"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "company",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "location",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "TypeContrat",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CDD,CDI,STAGE"
+    },
+    {
+      "fieldName": "salary",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "skills",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "experienceLevel",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "postedDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Offre",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "recruteur",
+      "otherEntityRelationshipName": "offres",
+      "relationshipName": "recruteur",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "poste",
+      "otherEntityRelationshipName": "offres",
+      "relationshipName": "poste",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

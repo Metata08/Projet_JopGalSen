@@ -1,0 +1,10 @@
+{
+  "jobCalsenApp": {
+    "TypeNotification": {
+      "null": "",
+      "INFO": "INFO",
+      "ALERT": "ALERT",
+      "WARNING": "WARNING"
+    }
+  }
+}

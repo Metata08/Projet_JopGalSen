@@ -1,0 +1,152 @@
+<div>
+  <h2 id="page-heading" data-cy="UsersHeading">
+    <span jhiTranslate="jobCalsenApp.users.home.title">Users</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="jobCalsenApp.users.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-users"
+        [routerLink]="['/users/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="jobCalsenApp.users.home.createLabel">Créer un nouveau Users</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (users().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="jobCalsenApp.users.home.notFound">Aucun Users trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.email">Email</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="password">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.password">Password</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="role">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.role">Role</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="telephone">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.telephone">Telephone</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="entreprise">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.entreprise">Entreprise</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="visiteur.id">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.visiteur">Visiteur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="recruteur.id">
+              <div class="d-flex">
+                <span jhiTranslate="jobCalsenApp.users.recruteur">Recruteur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (users of users(); track trackId(users)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/users', users.id, 'view']">{{ users.id }}</a>
+              </td>
+              <td>{{ users.email }}</td>
+              <td>{{ users.password }}</td>
+              <td>{{ users.name }}</td>
+              <td [jhiTranslate]="'jobCalsenApp.Roles.' + (users.role ?? 'null')">
+                {{ { null: '', Candidate: 'Candidate', Recruiter: 'Recruiter', Admin: 'Admin' }[users.role ?? 'null'] }}
+              </td>
+              <td>{{ users.telephone }}</td>
+              <td>{{ users.entreprise }}</td>
+              <td>
+                @if (users.visiteur) {
+                  <div>
+                    <a [routerLink]="['/visiteur', users.visiteur.id, 'view']">{{ users.visiteur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (users.recruteur) {
+                  <div>
+                    <a [routerLink]="['/recruteur', users.recruteur.id, 'view']">{{ users.recruteur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/users', users.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/users', users.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(users)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

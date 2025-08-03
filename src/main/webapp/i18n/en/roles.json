@@ -1,0 +1,10 @@
+{
+  "jobCalsenApp": {
+    "Roles": {
+      "null": "",
+      "Candidate": "Candidate",
+      "Recruiter": "Recruiter",
+      "Admin": "Admin"
+    }
+  }
+}

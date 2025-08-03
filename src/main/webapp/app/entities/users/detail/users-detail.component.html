@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (users(); as usersRef) {
+      <div>
+        <h2 data-cy="usersDetailsHeading"><span jhiTranslate="jobCalsenApp.users.detail.title">Users</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ usersRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.email">Email</span></dt>
+          <dd>
+            <span>{{ usersRef.email }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.password">Password</span></dt>
+          <dd>
+            <span>{{ usersRef.password }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.name">Name</span></dt>
+          <dd>
+            <span>{{ usersRef.name }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.role">Role</span></dt>
+          <dd>
+            <span [jhiTranslate]="'jobCalsenApp.Roles.' + (usersRef.role ?? 'null')">{{
+              { null: '', Candidate: 'Candidate', Recruiter: 'Recruiter', Admin: 'Admin' }[usersRef.role ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.telephone">Telephone</span></dt>
+          <dd>
+            <span>{{ usersRef.telephone }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.entreprise">Entreprise</span></dt>
+          <dd>
+            <span>{{ usersRef.entreprise }}</span>
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.visiteur">Visiteur</span></dt>
+          <dd>
+            @if (users()!.visiteur) {
+              <div>
+                <a [routerLink]="['/visiteur', users()!.visiteur?.id, 'view']">{{ usersRef.visiteur?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="jobCalsenApp.users.recruteur">Recruteur</span></dt>
+          <dd>
+            @if (users()!.recruteur) {
+              <div>
+                <a [routerLink]="['/recruteur', users()!.recruteur?.id, 'view']">{{ usersRef.recruteur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/users', usersRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

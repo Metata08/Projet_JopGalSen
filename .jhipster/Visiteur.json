@@ -1,0 +1,23 @@
+{
+  "annotations": {
+    "changelogDate": "20250801005718"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "cv",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Visiteur",
+  "relationships": [
+    {
+      "otherEntityName": "users",
+      "otherEntityRelationshipName": "visiteur",
+      "relationshipName": "user",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}
