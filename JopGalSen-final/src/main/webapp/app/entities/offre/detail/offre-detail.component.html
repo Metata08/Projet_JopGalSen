@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (offre(); as offreRef) {
+      <div>
+        <h2 data-cy="offreDetailsHeading"><span jhiTranslate="jopGalSenApp.offre.detail.title">Offre</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ offreRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.titre">Titre</span></dt>
+          <dd>
+            <span>{{ offreRef.titre }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.description">Description</span></dt>
+          <dd>
+            <span>{{ offreRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.entreprise">Entreprise</span></dt>
+          <dd>
+            <span>{{ offreRef.entreprise }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.localite">Localite</span></dt>
+          <dd>
+            <span>{{ offreRef.localite }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.categorie">Categorie</span></dt>
+          <dd>
+            <span>{{ offreRef.categorie }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.experience">Experience</span></dt>
+          <dd>
+            <span>{{ offreRef.experience }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.exigences">Exigences</span></dt>
+          <dd>
+            <span>{{ offreRef.exigences }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.benefice">Benefice</span></dt>
+          <dd>
+            <span>{{ offreRef.benefice }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.dateDePostule">Date De Postule</span></dt>
+          <dd>
+            <span>{{ offreRef.dateDePostule | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.dateDeFin">Date De Fin</span></dt>
+          <dd>
+            <span>{{ offreRef.dateDeFin | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.urgent">Urgent</span></dt>
+          <dd>
+            <span>{{ offreRef.urgent }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.remuneration">Remuneration</span></dt>
+          <dd>
+            <span>{{ offreRef.remuneration }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.contrat">Contrat</span></dt>
+          <dd>
+            <span [jhiTranslate]="'jopGalSenApp.TypeContrat.' + (offreRef.contrat ?? 'null')">{{
+              { null: '', CDD: 'CDD', CDI: 'CDI', STAGE: 'STAGE' }[offreRef.contrat ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.recruteur">Recruteur</span></dt>
+          <dd>
+            @if (offre()!.recruteur) {
+              <div>
+                <a [routerLink]="['/recruteur', offre()!.recruteur?.id, 'view']">{{ offreRef.recruteur?.entreprise }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="jopGalSenApp.offre.postes">Postes</span></dt>
+          <dd>
+            @for (postes of offreRef.postes; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/poste', postes.id, 'view']">{{ postes?.nomPoste }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/offre', offreRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

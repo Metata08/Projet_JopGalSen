@@ -1,0 +1,106 @@
+/**
+ * Enumération pour le statut d'une candidature.
+ */
+enum Statuts {
+    EN_ATTENTE, ACCEPTEE, REFUSEE
+}
+
+/**
+ * Enumération pour le type de contrat.
+ */
+enum TypeContrat {
+    CDD, CDI, STAGE
+}
+
+/**
+ * L'entité Domaine représente un secteur d'activité.
+ */
+entity Domaine {
+    nomDomaine String required
+}
+
+/**
+ * L'entité Poste représente un métier ou un titre de poste.
+ */
+entity Poste {
+    nomPoste String required
+}
+
+/**
+ * L'entité Offre, publiée par un Recruteur.
+ */
+entity Offre {
+    titre String required,
+    description TextBlob,
+    entreprise String,
+    localite String,
+    categorie String ,
+    experience String,
+    exigences String,
+    benefice String,
+    dateDePostule LocalDate,
+    dateDeFin LocalDate,
+    urgent Boolean,
+    remuneration Integer,
+    contrat TypeContrat required
+}
+
+/**
+ * L'entité Candidature fait le lien entre un Candidat et une Offre.
+ */
+entity Candidature {
+    dateCandidature LocalDate required,
+    statut Statuts required
+}
+
+/**
+ * L'entité Candidat.
+ */
+entity Candidat {
+    cv AnyBlob,
+    tel String,
+    profil TextBlob
+}
+
+/**
+ * L'entité Recruteur.
+ */
+entity Recruteur {
+    entreprise String,
+    tel String
+}
+
+/**
+ * L'entité Notification, destinée à un utilisateur.
+ */
+entity Notification {
+    message TextBlob required
+}
+
+// --- DÉFINITION DES RELATIONS ---
+
+relationship OneToOne {
+    Candidat{user(login) required} to User,
+    Recruteur{user(login) required} to User
+}
+
+relationship ManyToOne {
+    Offre{recruteur(entreprise)} to Recruteur,
+    Candidature{offre(titre)} to Offre,
+    Candidature{candidat(user)} to Candidat,
+    Poste{domaine(nomDomaine)} to Domaine,
+    Notification{user(login)} to User
+}
+
+relationship ManyToMany {
+    Offre{postes(nomPoste)} to Poste{offres}
+}
+
+// --- OPTIONS JHIPSTER ---
+
+// Utilisation de l'ancien mot-clé 'paginate' pour éviter l'erreur de parsing.
+// L'avertissement qui en résulte est normal et non-bloquant.
+paginate Offre, Candidature, Poste, Domaine, Notification with pagination
+
+dto * with mapstruct
+service all with serviceImpl

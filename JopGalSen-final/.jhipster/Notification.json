@@ -1,5 +1,7 @@
 {
-  "annotations": {},
+  "annotations": {
+    "changelogDate": "20250805153036"
+  },
   "applications": "*",
   "dto": "mapstruct",
   "fields": [
@@ -20,5 +22,6 @@
       "relationshipWithBuiltInEntity": true
     }
   ],
+  "searchEngine": "no",
   "service": "serviceImpl"
 }
