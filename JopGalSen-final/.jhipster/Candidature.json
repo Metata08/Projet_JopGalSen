@@ -1,0 +1,36 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateCandidature",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "Statuts",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_ATTENTE,ACCEPTEE,REFUSEE"
+    }
+  ],
+  "name": "Candidature",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "titre",
+      "otherEntityName": "offre",
+      "relationshipName": "offre",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "candidat",
+      "relationshipName": "candidat",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

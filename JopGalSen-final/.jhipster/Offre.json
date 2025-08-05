@@ -1,0 +1,82 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "titre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "entreprise",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "localite",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "categorie",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "experience",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "exigences",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "benefice",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateDePostule",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateDeFin",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "urgent",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "remuneration",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "contrat",
+      "fieldType": "TypeContrat",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CDD,CDI,STAGE"
+    }
+  ],
+  "name": "Offre",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "entreprise",
+      "otherEntityName": "recruteur",
+      "relationshipName": "recruteur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "nomPoste",
+      "otherEntityName": "poste",
+      "otherEntityRelationshipName": "offres",
+      "relationshipName": "postes",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,73 @@
+enum Statuts {
+    EN_ATTENTE, ACCEPTEE, REFUSEE
+}
+
+enum TypeContrat {
+    CDD, CDI, STAGE
+}
+
+entity Domaine {
+    nomDomaine String required
+}
+
+entity Poste {
+    nomPoste String required
+}
+
+entity Offre {
+    titre String required,
+    description TextBlob,
+    entreprise String,
+    localite String,
+    categorie String,
+    experience String,
+    exigences String,
+    benefice String,
+    dateDePostule LocalDate,
+    dateDeFin LocalDate,
+    urgent Boolean,
+    remuneration Integer,
+    contrat TypeContrat required
+}
+
+entity Candidature {
+    dateCandidature LocalDate required,
+    statut Statuts required
+}
+
+entity Candidat {
+    cv AnyBlob,
+    tel String,
+    profil TextBlob
+}
+
+entity Recruteur {
+    entreprise String,
+    tel String
+}
+
+entity Notification {
+    message TextBlob required
+}
+
+relationship OneToOne {
+    Candidat{user} to User with builtInEntity,
+    Recruteur{user} to User with builtInEntity
+}
+
+relationship ManyToOne {
+    Offre{recruteur(entreprise)} to Recruteur,
+    Candidature{offre(titre)} to Offre,
+    Candidature{candidat} to Candidat,
+    Poste{domaine(nomDomaine)} to Domaine,
+    Notification{user} to User with builtInEntity
+}
+
+relationship ManyToMany {
+    Offre{postes(nomPoste)} to Poste{offres}
+}
+
+paginate Offre, Candidature, Poste, Domaine, Notification with pagination
+
+dto * with mapstruct
+service all with serviceImpl

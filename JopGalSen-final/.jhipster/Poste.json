@@ -1,0 +1,31 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nomPoste",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Poste",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "nomDomaine",
+      "otherEntityName": "domaine",
+      "relationshipName": "domaine",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "offre",
+      "otherEntityRelationshipName": "postes",
+      "relationshipName": "offres",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,16 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nomDomaine",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Domaine",
+  "pagination": "pagination",
+  "relationships": [],
+  "service": "serviceImpl"
+}
