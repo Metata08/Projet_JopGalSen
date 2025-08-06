@@ -1,0 +1,200 @@
+<div class="min-vh-100 bg-gradient-hero d-flex align-items-center justify-content-center p-4">
+  <div class="w-100" style="max-width: 500px">
+    <button (click)="navigateToHome()" class="btn btn-link text-white mb-4 d-flex align-items-center gap-2">
+      <i class="bi bi-arrow-left"></i>
+      Retour à l'accueil
+    </button>
+    
+    <div class="card bg-white bg-opacity-95 border-0 shadow-lg">
+      <div class="card-header text-center">
+        <h2 class="h3 mb-1">Rejoignez JobGalSen</h2>
+        <p class="text-muted mb-0">Votre parcours professionnel commence ici</p>
+      </div>
+      
+      <div class="card-body">
+        <ul class="nav nav-tabs mb-4" id="authTabs">
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">
+              Connexion
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'register'" (click)="activeTab = 'register'">
+              Inscription
+            </a>
+          </li>
+        </ul>
+        
+        <div *ngIf="activeTab === 'login'" class="tab-pane fade show active">
+          <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="d-grid gap-3">
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input
+                id="loginEmail"
+                type="email"
+                formControlName="email"
+                class="form-control"
+                placeholder="votre.email@example.com"
+                required
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="loginPassword">Mot de passe</label>
+              <div class="input-group">
+                <input
+                  id="loginPassword"
+                  [type]="showPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  class="form-control"
+                  placeholder="••••••••"
+                  required
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="togglePasswordVisibility()"
+                >
+                  <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  formControlName="rememberMe"
+                  class="form-check-input"
+                >
+                <label for="rememberMe" class="form-check-label">Se souvenir de moi</label>
+              </div>
+              <button type="button" class="btn btn-link p-0 text-primary">
+                Mot de passe oublié ?
+              </button>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">
+              Se connecter
+            </button>
+            <div *ngIf="registerControls['password'].errors?.['weakPassword']" class="text-danger small">
+                Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre
+            </div>
+          </form>
+        </div>
+        
+        <div *ngIf="activeTab === 'register'" class="tab-pane fade show active">
+          <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="d-grid gap-3">
+            <div class="form-group">
+              <label>Je suis un(e)</label>
+              <select 
+                class="form-select" 
+                formControlName="userType" 
+                (change)="userType = registerForm.get('userType')?.value">
+                <option value="candidate">Candidat(e)</option>
+                <option value="recruteur">Recruteur</option>
+            </select>
+            </div>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="firstName">Prénom</label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    formControlName="firstName"
+                    class="form-control"
+                    placeholder="Votre prénom"
+                  >
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="lastName">Nom</label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    formControlName="lastName"
+                    class="form-control"
+                    placeholder="Votre nom"
+                  >
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="registerEmail">Email</label>
+              <input
+                id="registerEmail"
+                type="email"
+                formControlName="email"
+                class="form-control"
+                placeholder="votre.email@example.com"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Téléphone</label>
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                class="form-control"
+                placeholder="+221 XX XXX XX XX"
+              >
+            </div>
+            
+            <div *ngIf="userType === 'recruteur'" class="form-group">
+              <label for="company">Entreprise</label>
+              <input
+                id="company"
+                type="text"
+                formControlName="company"
+                class="form-control"
+                placeholder="Nom de votre entreprise"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="registerPassword">Mot de passe</label>
+              <div class="input-group">
+                <input
+                  id="registerPassword"
+                  [type]="showPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  class="form-control"
+                  placeholder="••••••••"
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="togglePasswordVisibility()"
+                >
+                  <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-check">
+              <input
+                type="checkbox"
+                id="acceptTerms"
+                formControlName="acceptTerms"
+                class="form-check-input"
+              >
+              <label for="acceptTerms" class="form-check-label">
+                J'accepte les <a href="#" class="text-primary">conditions d'utilisation</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn btn-accent w-100">
+              Créer mon compte
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

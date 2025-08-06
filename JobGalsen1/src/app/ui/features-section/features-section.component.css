@@ -1,0 +1,24 @@
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background: rgba(13, 110, 253, 0.1);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    font-size: 1.5rem;
+    color: var(--bs-primary);
+  }
+}
+
+.hover-shadow {
+  &:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+}
+
+.max-w-lg {
+  max-width: 600px;
+}

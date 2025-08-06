@@ -1,0 +1,47 @@
+/* Card hover effect */
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.container-fluid{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px; /* Adjusted for fixed header */
+}
+
+/* Active tab styling */
+.nav-tabs .nav-link.active {
+  border-bottom: 3px solid var(--bs-primary);
+  font-weight: 500;
+}
+
+/* Job card styling */
+.border.rounded {
+  transition: all 0.3s ease;
+}
+
+.border.rounded:hover {
+  background-color: #f8f9fa;
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+/* Stats icon color */
+.bi {
+  color: var(--bs-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .min-vh-100 {
+    min-height: auto;
+  }
+}

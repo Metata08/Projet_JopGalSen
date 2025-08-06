@@ -1,0 +1,349 @@
+<div class="container-fluid px-0">
+<app-recruteur-header></app-recruteur-header>
+  <div class="container">
+    <!-- Header avec boutons -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+          <i class="bi bi-arrow-left me-2"></i>Retour
+        </button>
+        <h1 class="h2 mb-0 d-inline">Créer une Offre d'Emploi</h1>
+      </div>
+      <div>
+        <button class="btn btn-outline-primary me-2" (click)="saveDraft()" [disabled]="isSubmitting">
+          <i class="bi bi-save me-2"></i>Sauvegarder brouillon
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de progression -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h2 class="h4 mb-3">
+          <i class="bi bi-megaphone me-2 text-primary"></i>Attirez les meilleurs talents
+        </h2>
+        
+        <div class="d-flex justify-content-between position-relative">
+          <div class="progress position-absolute w-100" style="height: 4px; top: 15px;">
+            <div class="progress-bar bg-primary" [style.width.%]="(currentStep-1)*33.33"></div>
+          </div>
+          
+          <div *ngFor="let step of [1,2,3,4]" class="text-center" style="width: 25%;">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                 [class.bg-primary]="currentStep >= step"
+                 [class.bg-secondary]="currentStep < step"
+                 [class.text-white]="currentStep >= step"
+                 style="width: 32px; height: 32px;">
+              <i [class]="getStepIcon(step)"></i>
+            </div>
+            <p class="mt-2 mb-0 small" [class.text-muted]="currentStep < step">
+              {{getStepTitle(step)}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire principal -->
+    <form [formGroup]="Job" (ngSubmit)="onSubmit()" class="row g-3">
+      <div class="col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!-- Étape 1: Informations générales -->
+            <div *ngIf="currentStep === 1">
+              <h3 class="h5 mb-4">
+                <i class="bi bi-info-circle text-primary me-2"></i>Informations générales
+              </h3>
+              
+              <div class="mb-3">
+                <label for="title" class="form-label">
+                  <i class="bi bi-card-heading me-1"></i>Titre du poste *
+                </label>
+                <input type="text" 
+                       class="form-control" 
+                       [class.is-invalid]="isFieldInvalid('title')"
+                       id="title" 
+                       formControlName="title"
+                       placeholder="Développeur Frontend React Senior">
+                <div class="invalid-feedback">{{getFieldError('title')}}</div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="company" class="form-label">
+                  <i class="bi bi-building me-1"></i>Entreprise *
+                </label>
+                <input type="text" 
+                       class="form-control" 
+                       [class.is-invalid]="isFieldInvalid('company')"
+                       id="company" 
+                       formControlName="company"
+                       placeholder="Votre entreprise">
+                <div class="invalid-feedback">{{getFieldError('company')}}</div>
+              </div>
+              
+              <div class="row g-2">
+                <div class="col-md-6 mb-3">
+                  <label for="location" class="form-label">
+                    <i class="bi bi-geo-alt me-1"></i>Localisation *
+                  </label>
+                  <select class="form-select" 
+                          [class.is-invalid]="isFieldInvalid('location')"
+                          id="location" 
+                          formControlName="location">
+                    <option value="">Choisir une ville</option>
+                    <option *ngFor="let loc of locations" [value]="loc">{{loc}}</option>
+                  </select>
+                  <div class="invalid-feedback">{{getFieldError('location')}}</div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="type" class="form-label">
+                    <i class="bi bi-file-earmark-text me-1"></i>Type d'emploi *
+                  </label>
+                  <select class="form-select" 
+                          [class.is-invalid]="isFieldInvalid('type')"
+                          id="type" 
+                          formControlName="type">
+                    <option value="">Sélectionner...</option>
+                    <option *ngFor="let type of jobTypes" [value]="type.value">{{type.label}}</option>
+                  </select>
+                  <div class="invalid-feedback">{{getFieldError('type')}}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Étape 2: Détails du poste -->
+            <div *ngIf="currentStep === 2">
+              <h3 class="h5 mb-4">
+                <i class="bi bi-file-text text-primary me-2"></i>Détails du poste
+              </h3>
+              
+              <div class="mb-3">
+                <label for="description" class="form-label">
+                  <i class="bi bi-card-text me-1"></i>Description *
+                </label>
+                <textarea class="form-control" 
+                          [class.is-invalid]="isFieldInvalid('description')"
+                          id="description" 
+                          formControlName="description"
+                          rows="5"
+                          placeholder="Responsabilités et missions..."></textarea>
+                <div class="invalid-feedback">{{getFieldError('description')}}</div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="requirements" class="form-label">
+                  <i class="bi bi-list-check me-1"></i>Exigences *
+                </label>
+                <textarea class="form-control" 
+                          [class.is-invalid]="isFieldInvalid('requirements')"
+                          id="requirements" 
+                          formControlName="requirements"
+                          rows="4"
+                          placeholder="Compétences requises..."></textarea>
+                <div class="invalid-feedback">{{getFieldError('requirements')}}</div>
+              </div>
+            </div>
+
+            <!-- Étape 3: Conditions -->
+            <div *ngIf="currentStep === 3">
+              <h3 class="h5 mb-4">
+                <i class="bi bi-clipboard-check text-primary me-2"></i>Conditions
+              </h3>
+              
+              <div class="row g-2">
+                <div class="col-md-6 mb-3">
+                  <label for="salary" class="form-label">
+                    <i class="bi bi-cash-coin me-1"></i>Salaire
+                  </label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="salary" 
+                         formControlName="salary"
+                         placeholder="500 000 - 800 000 FCFA">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="deadline" class="form-label">
+                    <i class="bi bi-calendar-date me-1"></i>Date limite *
+                  </label>
+                  <input type="date" 
+                         class="form-control" 
+                         [class.is-invalid]="isFieldInvalid('deadline')"
+                         id="deadline" 
+                         formControlName="deadline">
+                  <div class="invalid-feedback">{{getFieldError('deadline')}}</div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="benefits" class="form-label">
+                  <i class="bi bi-gift me-1"></i>Avantages
+                </label>
+                <textarea class="form-control" 
+                          id="benefits" 
+                          formControlName="benefits"
+                          rows="3"
+                          placeholder="Avantages offerts..."></textarea>
+              </div>
+              
+              <div class="row g-2">
+                <div class="col-md-6 mb-3">
+                  <label for="category" class="form-label">
+                    <i class="bi bi-tags me-1"></i>Catégorie *
+                  </label>
+                  <select class="form-select" 
+                          [class.is-invalid]="isFieldInvalid('category')"
+                          id="category" 
+                          formControlName="category">
+                    <option value="">Sélectionner...</option>
+                    <option *ngFor="let cat of categories" [value]="cat.value">{{cat.label}}</option>
+                  </select>
+                  <div class="invalid-feedback">{{getFieldError('category')}}</div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="experience" class="form-label">
+                    <i class="bi bi-award me-1"></i>Expérience *
+                  </label>
+                  <select class="form-select" 
+                          [class.is-invalid]="isFieldInvalid('experience')"
+                          id="experience" 
+                          formControlName="experience">
+                    <option value="">Sélectionner...</option>
+                    <option *ngFor="let exp of experienceLevels" [value]="exp.value">{{exp.label}}</option>
+                  </select>
+                  <div class="invalid-feedback">{{getFieldError('experience')}}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Étape 4: Aperçu -->
+            <div *ngIf="currentStep === 4">
+              <h3 class="h5 mb-4">
+                <i class="bi bi-eye text-primary me-2"></i>Aperçu final
+              </h3>
+              
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                Vérifiez toutes les informations avant publication
+              </div>
+              
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h4 class="card-title">{{Job.value.title || 'Aucun titre'}}</h4>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                    <i class="bi bi-building"></i> {{Job.value.company || 'Non spécifié'}} • 
+                    <i class="bi bi-geo-alt"></i> {{Job.value.location || 'Non spécifié'}}
+                  </h6>
+                  
+                  <div class="d-flex gap-3 my-2">
+                    <span class="badge bg-primary">
+                      <i class="bi bi-clock"></i> {{Job.value.type || 'Non spécifié'}}
+                    </span>
+                    <span class="badge bg-success">
+                      <i class="bi bi-award"></i> {{getExperienceLabel(Job.value.experience) || 'Non spécifié'}}
+                    </span>
+                    <span *ngIf="Job.value.salary" class="badge bg-info">
+                      <i class="bi bi-cash"></i> {{Job.value.salary}}
+                    </span>
+                  </div>
+                  
+                  <h5 class="mt-3"><i class="bi bi-card-text"></i> Description</h5>
+                  <p class="card-text">{{Job.value.description || 'Aucune description'}}</p>
+                  
+                  <h5 class="mt-3"><i class="bi bi-list-check"></i> Exigences</h5>
+                  <p class="card-text">{{Job.value.requirements || 'Aucune exigence spécifiée'}}</p>
+                  
+                  <h5 class="mt-3"><i class="bi bi-gift"></i> Avantages</h5>
+                  <p class="card-text">{{Job.value.benefits || 'Aucun avantage spécifié'}}</p>
+                  
+                  <div class="mt-3 text-end">
+                    <small class="text-muted">
+                      <i class="bi bi-calendar"></i> Date limite: 
+                      {{Job.value.deadline ? (Job.value.deadline | date) : 'Non spécifiée'}}
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Boutons de navigation -->
+            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+              <button type="button" class="btn btn-outline-secondary" (click)="prevStep()" *ngIf="currentStep > 1">
+                <i class="bi bi-arrow-left me-2"></i>Précédent
+              </button>
+              <span *ngIf="currentStep === 1"></span>
+              
+              <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 4">
+                Suivant <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+              
+              <button type="submit" class="btn btn-success" *ngIf="currentStep === 4" [disabled]="Job.invalid || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="bi bi-send" [class.d-none]="isSubmitting"></i> Publier l'offre
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm mb-3">
+          <div class="card-body">
+            <h6 class="card-title">
+              <i class="bi bi-lightbulb text-warning me-2"></i>Conseils pour une bonne offre
+            </h6>
+            <ul class="list-group list-group-flush mt-3">
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <span>Titre clair et précis</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <span>Description détaillée des missions</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <span>Liste des compétences requises</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <span>Avantages mis en valeur</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <span>Date limite réaliste</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title">
+              <i class="bi bi-clipboard-data text-primary me-2"></i>Statut de publication
+            </h6>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Statut:</span>
+                <span class="badge bg-warning">Brouillon</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Visibilité:</span>
+                <span>Publique après validation</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Complétion:</span>
+                <div class="progress w-50">
+                  <div class="progress-bar" [style.width.%]="(currentStep-1)*25"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
