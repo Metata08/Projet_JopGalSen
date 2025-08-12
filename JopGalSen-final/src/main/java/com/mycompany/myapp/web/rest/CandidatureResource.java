@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.CandidatureRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.CandidatureService;
 import com.mycompany.myapp.service.dto.CandidatureDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -55,6 +57,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.CANDIDAT + "\")")
     public ResponseEntity<CandidatureDTO> createCandidature(@Valid @RequestBody CandidatureDTO candidatureDTO) throws URISyntaxException {
         LOG.debug("REST request to save Candidature : {}", candidatureDTO);
         if (candidatureDTO.getId() != null) {
@@ -111,6 +114,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.CANDIDAT + "\")")
     public ResponseEntity<CandidatureDTO> partialUpdateCandidature(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CandidatureDTO candidatureDTO
@@ -178,6 +182,7 @@ public class CandidatureResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.CANDIDAT + "\")")
     public ResponseEntity<Void> deleteCandidature(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Candidature : {}", id);
         candidatureService.delete(id);

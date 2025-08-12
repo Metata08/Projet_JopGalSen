@@ -8,7 +8,6 @@ import com.mycompany.myapp.service.OffreService;
 import com.mycompany.myapp.service.dto.OffreDTO;
 import com.mycompany.myapp.service.mapper.OffreMapper;
 
-import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.security.access.AccessDeniedException; 
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.Offre}.
  */
@@ -55,53 +54,38 @@ public class OffreServiceImpl implements OffreService {
     public Optional<OffreDTO> partialUpdate(OffreDTO offreDTO) {
         LOG.debug("Request to partially update Offre : {}", offreDTO);
 
+        // --- CORRECTION APPLIQUÉE ICI ---
+        // On récupère l'entité et on lève une exception si elle n'existe pas, en une seule ligne.
+        Offre existingOffre = offreRepository
+            .findById(offreDTO.getId())
+            .orElseThrow(() -> new AccessDeniedException("L'offre avec l'ID " + offreDTO.getId() + " n'existe pas."));
 
-           // --- DÉBUT DE LA LOGIQUE DE SÉCURITÉ PERSONNALISÉE ---
-        
-        // On récupère l'offre existante avec toutes ses relations pour la vérification
-        Optional<Offre> existingOffreOptional = offreRepository.findById(offreDTO.getId());
-        
-        if (!existingOffreOptional.isPresent()) {
-            // Normalement géré par le contrôleur, mais c'est une sécurité supplémentaire
-            throw new RuntimeException(new AccessDeniedException("L'offre à modifier n'existe pas."));
-        }
-        
-        Offre existingOffre = existingOffreOptional.get();
-
-        // On vérifie si l'utilisateur courant est un admin. Si oui, il a tous les droits.
+        // On effectue les vérifications de sécurité.
         boolean isAdmin = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN);
 
-        // Sinon (si ce n'est pas un admin), on vérifie s'il est le propriétaire de l'offre.
+        // Si l'utilisateur n'est PAS un admin, on doit vérifier qu'il est le propriétaire.
         if (!isAdmin) {
-            String currentUserLogin = SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new RuntimeException(new AccessDeniedException("Accès refusé : utilisateur non identifié.")));
-            
-            // On vérifie que l'offre a bien un recruteur et un utilisateur associés.
+            String currentUserLogin = SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new AccessDeniedException("Accès refusé : utilisateur non identifié."));
+
             if (existingOffre.getRecruteur() == null || existingOffre.getRecruteur().getUser() == null) {
-                // Cette erreur indique un problème de données, mais c'est une sécurité importante.
-                throw new RuntimeException(new AccessDeniedException("Accès refusé : l'offre n'a pas de propriétaire défini."));
+                throw new AccessDeniedException("Accès refusé : l'offre n'a pas de propriétaire défini.");
             }
 
             String ownerLogin = existingOffre.getRecruteur().getUser().getLogin();
 
             if (!currentUserLogin.equals(ownerLogin)) {
-                // Si les logins ne correspondent pas, on lève une exception.
-                // Spring Security la transformera en une réponse HTTP 403 Forbidden.
-                throw new RuntimeException(new AccessDeniedException("Accès refusé : vous n'êtes pas le propriétaire de cette offre."));
+                throw new AccessDeniedException("Accès refusé : vous n'êtes pas le propriétaire de cette offre.");
             }
         }
-        //
 
-
-        return offreRepository
-            .findById(offreDTO.getId())
-            .map(offreEntity -> {
-                offreMapper.partialUpdate(offreEntity, offreDTO);
-
-                return offreEntity;
-            })
-            .map(offreRepository::save)
-            .map(offreMapper::toDto);
+        // Si la sécurité est validée, on procède à la mise à jour.
+        offreMapper.partialUpdate(existingOffre, offreDTO);
+        
+        Offre updatedOffre = offreRepository.save(existingOffre);
+        
+        return Optional.of(offreMapper.toDto(updatedOffre));
     }
 
     @Override

@@ -353,12 +353,15 @@ class AccountResourceIT {
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(validUser)))
             .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy");
-        assertThat(userDup).isPresent();
-        assertThat(userDup.orElseThrow().getAuthorities())
-            .hasSize(1)
-            .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).orElseThrow());
+       Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("user");
+assertThat(userDup).isPresent();
 
+// On vérifie que le compte existant "user" a bien les 2 rôles attendus
+assertThat(userDup.orElseThrow().getAuthorities())
+    .hasSize(2) // <-- On attend maintenant 2 rôles
+    .extracting("name") // <-- On extrait leurs noms pour une comparaison plus facile
+    .containsExactlyInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.CANDIDAT);
+     // <-- On vérifie la présence des 2 rôles, peu importe l'ordre
         userService.deleteUser("badguy");
     }
 

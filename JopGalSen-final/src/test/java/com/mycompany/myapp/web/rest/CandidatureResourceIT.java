@@ -4,6 +4,7 @@ import static com.mycompany.myapp.domain.CandidatureAsserts.*;
 import static com.mycompany.myapp.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -13,6 +14,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Candidature;
 import com.mycompany.myapp.domain.enumeration.Statuts;
 import com.mycompany.myapp.repository.CandidatureRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.CandidatureService;
 import com.mycompany.myapp.service.dto.CandidatureDTO;
 import com.mycompany.myapp.service.mapper.CandidatureMapper;
@@ -118,6 +120,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void createCandidature() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Candidature
@@ -142,6 +145,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void createCandidatureWithExistingId() throws Exception {
         // Create the Candidature with an existing ID
         candidature.setId(1L);
@@ -340,6 +344,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void partialUpdateCandidatureWithPatch() throws Exception {
         // Initialize the database
         insertedCandidature = candidatureRepository.saveAndFlush(candidature);
@@ -371,6 +376,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void fullUpdateCandidatureWithPatch() throws Exception {
         // Initialize the database
         insertedCandidature = candidatureRepository.saveAndFlush(candidature);
@@ -399,6 +405,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void patchNonExistingCandidature() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         candidature.setId(longCount.incrementAndGet());
@@ -421,6 +428,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void patchWithIdMismatchCandidature() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         candidature.setId(longCount.incrementAndGet());
@@ -461,6 +469,7 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.CANDIDAT)
     void deleteCandidature() throws Exception {
         // Initialize the database
         insertedCandidature = candidatureRepository.saveAndFlush(candidature);

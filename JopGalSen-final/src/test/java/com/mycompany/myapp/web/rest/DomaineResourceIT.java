@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Domaine;
 import com.mycompany.myapp.repository.DomaineRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.dto.DomaineDTO;
 import com.mycompany.myapp.service.mapper.DomaineMapper;
 import jakarta.persistence.EntityManager;
@@ -97,6 +98,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void createDomaine() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Domaine
@@ -121,6 +123,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void createDomaineWithExistingId() throws Exception {
         // Create the Domaine with an existing ID
         domaine.setId(1L);
@@ -193,6 +196,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void putExistingDomaine() throws Exception {
         // Initialize the database
         insertedDomaine = domaineRepository.saveAndFlush(domaine);
@@ -219,6 +223,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void putNonExistingDomaine() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         domaine.setId(longCount.incrementAndGet());
@@ -239,6 +244,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void putWithIdMismatchDomaine() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         domaine.setId(longCount.incrementAndGet());
@@ -279,6 +285,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void partialUpdateDomaineWithPatch() throws Exception {
         // Initialize the database
         insertedDomaine = domaineRepository.saveAndFlush(domaine);
@@ -307,6 +314,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void fullUpdateDomaineWithPatch() throws Exception {
         // Initialize the database
         insertedDomaine = domaineRepository.saveAndFlush(domaine);
@@ -335,6 +343,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void patchNonExistingDomaine() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         domaine.setId(longCount.incrementAndGet());
@@ -357,6 +366,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void patchWithIdMismatchDomaine() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         domaine.setId(longCount.incrementAndGet());
@@ -397,6 +407,7 @@ class DomaineResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void deleteDomaine() throws Exception {
         // Initialize the database
         insertedDomaine = domaineRepository.saveAndFlush(domaine);
