@@ -364,8 +364,6 @@ assertThat(userDup.orElseThrow().getAuthorities())
      // <-- On vérifie la présence des 2 rôles, peu importe l'ordre
         userService.deleteUser("badguy");
     }
-
-    @Test
     @Transactional
     void testActivateAccount() throws Exception {
         final String activationKey = "some activation key";
