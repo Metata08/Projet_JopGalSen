@@ -61,7 +61,7 @@ export const routes: Routes = [
 
     /** Dashboard Candidat */
     {
-        path : 'candidat-dashbord', 
+        path : 'candidat', 
         component: CandidatDashbordComponent,
         /*canActivate: [AuthGuard, RoleGuard], 
         data: { requiredRole: 'candidat' }*/
@@ -71,7 +71,7 @@ export const routes: Routes = [
 
     /** Dashboard Recruteur */
     {
-        path : 'recruteur-dashbord', 
+        path : 'recruteur', 
         component: RecruteurDashbordComponent,
         /*canActivate: [AuthGuard, RoleGuard],
         data: { requiredRole: 'recruteur' }*/
