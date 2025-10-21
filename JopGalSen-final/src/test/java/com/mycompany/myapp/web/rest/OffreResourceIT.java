@@ -4,6 +4,7 @@ import static com.mycompany.myapp.domain.OffreAsserts.*;
 import static com.mycompany.myapp.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -13,6 +14,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Offre;
 import com.mycompany.myapp.domain.enumeration.TypeContrat;
 import com.mycompany.myapp.repository.OffreRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.OffreService;
 import com.mycompany.myapp.service.dto.OffreDTO;
 import com.mycompany.myapp.service.mapper.OffreMapper;
@@ -177,6 +179,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void createOffre() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Offre
@@ -201,6 +204,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void createOffreWithExistingId() throws Exception {
         // Create the Offre with an existing ID
         offre.setId(1L);
@@ -331,6 +335,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void putExistingOffre() throws Exception {
         // Initialize the database
         insertedOffre = offreRepository.saveAndFlush(offre);
@@ -370,6 +375,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void putNonExistingOffre() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         offre.setId(longCount.incrementAndGet());
@@ -390,6 +396,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void putWithIdMismatchOffre() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         offre.setId(longCount.incrementAndGet());
@@ -430,6 +437,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void partialUpdateOffreWithPatch() throws Exception {
         // Initialize the database
         insertedOffre = offreRepository.saveAndFlush(offre);
@@ -465,6 +473,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void fullUpdateOffreWithPatch() throws Exception {
         // Initialize the database
         insertedOffre = offreRepository.saveAndFlush(offre);
@@ -506,6 +515,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void patchNonExistingOffre() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         offre.setId(longCount.incrementAndGet());
@@ -528,6 +538,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void patchWithIdMismatchOffre() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         offre.setId(longCount.incrementAndGet());
@@ -568,6 +579,7 @@ class OffreResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.RECRUTEUR)
     void deleteOffre() throws Exception {
         // Initialize the database
         insertedOffre = offreRepository.saveAndFlush(offre);

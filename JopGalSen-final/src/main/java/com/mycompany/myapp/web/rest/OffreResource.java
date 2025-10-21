@@ -191,6 +191,7 @@ public class OffreResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.RECRUTEUR + "\")")
     public ResponseEntity<Void> deleteOffre(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Offre : {}", id);
         offreService.delete(id);
