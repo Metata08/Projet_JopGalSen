@@ -14,7 +14,7 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="message" type="${clobType}">
+            <column name="message" type="TEXT">
                 <constraints nullable="false" />
             </column>
             <column name="user_id" type="bigint">

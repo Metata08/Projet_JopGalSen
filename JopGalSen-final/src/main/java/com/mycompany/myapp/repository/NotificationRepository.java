@@ -14,7 +14,5 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     @Query("select notification from Notification notification where notification.user.login = ?#{authentication.name}")
-    List<Notification> findByUserIsCurrentUser();
-
     Page<Notification> findByUserIsCurrentUser(Pageable pageable);
 }

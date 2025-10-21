@@ -14,7 +14,7 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="cv" type="${blobType}">
+            <column name="cv" type="BLOB">
                 <constraints nullable="true" />
             </column>
             <column name="cv_content_type" type="varchar(255)">
@@ -23,7 +23,7 @@
             <column name="tel" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="profil" type="${clobType}">
+            <column name="profil" type="TEXT">
                 <constraints nullable="true" />
             </column>
             <column name="user_id" type="bigint">

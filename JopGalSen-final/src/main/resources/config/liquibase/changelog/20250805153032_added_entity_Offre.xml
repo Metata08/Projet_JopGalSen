@@ -17,7 +17,7 @@
             <column name="titre" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="TEXT">
                 <constraints nullable="true" />
             </column>
             <column name="entreprise" type="varchar(255)">
