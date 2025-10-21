@@ -79,7 +79,7 @@ export class RecruteurService {
   private mockGetJobs(): Job[] {
     return [
       {
-        id: '1',
+        id: 1,
         title: 'Développeur Full Stack Senior',
         company: 'Tech Solutions SARL',
         location: 'Dakar, Sénégal',
@@ -94,9 +94,10 @@ export class RecruteurService {
         postedDate: '2024-01-10',
         urgent: true,
         recruiterId: this.currentRecruiterId,
+        skills: ['JavaScript', 'Angular', 'Node.js']
       },
       {
-        id: '1',
+        id: 1,
         title: 'Développeur Full Stack Senior',
         company: 'Tech Solutions SARL',
         location: 'Dakar, Sénégal',
@@ -111,9 +112,10 @@ export class RecruteurService {
         postedDate: '2024-01-10',
         urgent: true,
         recruiterId: this.currentRecruiterId,
+        skills: ['JavaScript', 'Angular', 'Node.js']
       },
       {
-        id: '1',
+        id: 1,
         title: 'Développeur Full Stack Senior',
         company: 'Tech Solutions SARL',
         location: 'Dakar, Sénégal',
@@ -128,9 +130,10 @@ export class RecruteurService {
         postedDate: '2024-01-10',
         urgent: true,
         recruiterId: this.currentRecruiterId,
+        skills: ['JavaScript', 'Angular', 'Node.js']
       },
       {
-        id: '1',
+        id: 1,
         title: 'Développeur Full Stack Senior',
         company: 'Tech Solutions SARL',
         location: 'Dakar, Sénégal',
@@ -145,9 +148,10 @@ export class RecruteurService {
         postedDate: '2024-01-10',
         urgent: true,
         recruiterId: this.currentRecruiterId,
+        skills: ['JavaScript', 'Angular', 'Node.js']
       },
       {
-        id: '1',
+        id: 1,
         title: 'Développeur Full Stack Senior',
         company: 'Tech Solutions SARL',
         location: 'Dakar, Sénégal',
@@ -162,6 +166,7 @@ export class RecruteurService {
         postedDate: '2024-01-10',
         urgent: true,
         recruiterId: this.currentRecruiterId,
+        skills: ['JavaScript', 'Angular', 'Node.js']
       }
     ].filter(job => job.recruiterId === this.currentRecruiterId);
   }

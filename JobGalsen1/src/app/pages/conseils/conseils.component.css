@@ -1,0 +1,49 @@
+/* Styles personnalisés pour reproduire les effets Tailwind */
+.hover-shadow {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.hover-primary {
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.hover-primary:hover {
+  color: var(--bs-primary) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Amélioration de l'apparence des badges */
+.badge {
+  font-size: 0.875em;
+  padding: 0.5em 0.75em;
+}
+
+/* Style pour les éléments de liste interactifs */
+.list-group-item-action {
+  transition: all 0.2s ease;
+  border-radius: 0.375rem !important;
+  margin-bottom: 0.25rem;
+}
+
+.list-group-item-action:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Animation douce pour les cartes */
+.card {
+  transition: all 0.3s ease;
+}

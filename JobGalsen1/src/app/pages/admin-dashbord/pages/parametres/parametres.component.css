@@ -1,0 +1,10 @@
+.nav-link {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-check-input {
+  width: 3rem;
+  height: 1.5rem;
+  cursor: pointer;
+}

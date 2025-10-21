@@ -17,12 +17,13 @@
           </dd>
           <dt><span jhiTranslate="jopGalSenApp.candidat.cv">Cv</span></dt>
           <dd>
-            @if (candidatRef.cv) {
+            <!--@if (candidatRef.cv) {
               <div>
                 <a (click)="openFile(candidatRef.cv ?? '', candidatRef.cvContentType)" jhiTranslate="entity.action.open">Ouvrir</a>
                 {{ candidatRef.cvContentType }}, {{ byteSize(candidatRef.cv ?? '') }}
               </div>
-            }
+              -
+            }-->
           </dd>
           <dt><span jhiTranslate="jopGalSenApp.candidat.tel">Tel</span></dt>
           <dd>

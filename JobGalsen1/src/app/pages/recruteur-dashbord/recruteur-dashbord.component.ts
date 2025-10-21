@@ -61,7 +61,7 @@ export class RecruteurDashbordComponent implements OnInit {
     this.router.navigate(['/create-emploi']);
   }
 
-  viewJobDetails(jobId: string): void {
+  viewJobDetails(jobId: number): void {
     this.router.navigate(['/emploi', jobId]);
   }
 

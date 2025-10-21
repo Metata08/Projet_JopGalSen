@@ -1,0 +1,11 @@
+.ms-sidebar-open {
+  margin-left: 264px;
+}
+
+.ms-sidebar-closed {
+  margin-left: 80px;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}

@@ -1,0 +1,212 @@
+<div class="min-vh-100 bg-light">
+  <!-- Navigation Component -->
+  <app-navigation></app-navigation>
+  
+  <!-- Hero Section -->
+  <section class="py-5 bg-primary bg-opacity-10">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-12 col-lg-8">
+          <h1 class="display-4 fw-bold text-primary mb-4">
+            Conseils Carrière
+          </h1>
+          <p class="lead text-muted mb-0">
+            Découvrez nos guides et conseils d'experts pour booster votre carrière professionnelle
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <div class="row g-4">
+      <!-- Sidebar -->
+      <div class="col-12 col-lg-3">
+        <!-- Catégories Card -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="card-title mb-0 fw-bold">
+              <i class="bi bi-journal-text me-2"></i>
+              Catégories
+            </h5>
+          </div>
+          <div class="card-body py-3">
+            <div class="list-group list-group-flush">
+              <div *ngFor="let category of categories" 
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 border-0"
+                   (click)="onCategoryClick(category)">
+                <span class="fw-medium">{{ category.name }}</span>
+                <span class="badge bg-secondary bg-opacity-25 text-dark">{{ category.count }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coaching Card -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="card-title mb-0 fw-bold">
+              <i class="bi bi-bullseye me-2"></i>
+              Coaching Carrière
+            </h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              Besoin d'un accompagnement personnalisé pour votre carrière ?
+            </p>
+            <button class="btn btn-primary w-100" (click)="onBookAppointment()">
+              Prendre rendez-vous
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-12 col-lg-9">
+        <!-- Header avec recherche -->
+        <div class="row align-items-center mb-4">
+          <div class="col">
+            <h2 class="h1 fw-bold mb-0">Derniers conseils</h2>
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-outline-primary" (click)="onViewAllConseils()">
+              Tous les conseils
+            </button>
+          </div>
+        </div>
+
+        <!-- Barre de recherche -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="input-group">
+              <span class="input-group-text bg-white">
+                <i class="bi bi-search text-muted"></i>
+              </span>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Rechercher un conseil, une catégorie, un auteur..."
+                (input)="onSearch($event)"
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+          </div>
+          <p class="mt-2 text-muted">Chargement des conseils...</p>
+        </div>
+
+        <!-- Conseils List -->
+        <div *ngIf="!isLoading" class="row g-4">
+          <div class="col-12" *ngFor="let conseil of filteredConseils">
+            <div class="card border-0 shadow-sm hover-shadow">
+              <div class="card-body p-4">
+                <div class="row align-items-start">
+                  <!-- Conseil Image -->
+                  <div class="col-auto">
+                    <div class="display-1">{{ conseil.image }}</div>
+                  </div>
+                  
+                  <!-- Conseil Content -->
+                  <div class="col">
+                    <!-- Category Badge -->
+                    <div class="mb-2">
+                      <span class="badge" [class]="getCategoryBadgeClass(conseil.category)">
+                        {{ conseil.category }}
+                      </span>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h3 class="h4 fw-bold text-dark mb-2 hover-primary cursor-pointer">
+                      {{ conseil.title }}
+                    </h3>
+                    
+                    <!-- Excerpt -->
+                    <p class="text-muted mb-3">{{ conseil.excerpt }}</p>
+                    
+                    <!-- Meta Information -->
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <div class="d-flex flex-wrap gap-3 text-muted small">
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-person me-1"></i>
+                            {{ conseil.author }}
+                          </div>
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar me-1"></i>
+                            {{ formatDate(conseil.date) }}
+                          </div>
+                          <span>{{ conseil.readTime }} de lecture</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <button class="btn btn-link text-primary text-decoration-none p-0" 
+                                (click)="onReadConseil(conseil)">
+                          Lire la suite
+                          <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message si aucun résultat -->
+        <div *ngIf="!isLoading && filteredConseils.length === 0" class="text-center py-5">
+          <div class="text-muted">
+            <i class="bi bi-journal-text display-1"></i>
+            <h3 class="mt-3">Aucun conseil trouvé</h3>
+            <p>Essayez de modifier vos critères de recherche</p>
+            <button class="btn btn-primary mt-3" (click)="onViewAllConseils()">
+              Voir tous les conseils
+            </button>
+          </div>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="card border-0 shadow-sm mt-5">
+          <div class="card-body p-5 text-center">
+            <h3 class="h2 fw-bold mb-3">Restez informé</h3>
+            <p class="text-muted mb-4">
+              Recevez nos derniers conseils carrière directement dans votre boîte mail
+            </p>
+            
+            <form [formGroup]="newsletterForm" (ngSubmit)="onSubscribeNewsletter()" class="row g-3 justify-content-center">
+              <div class="col-12 col-md-8 col-lg-6">
+                <div class="input-group">
+                  <input 
+                    type="email" 
+                    class="form-control" 
+                    placeholder="Votre email"
+                    formControlName="email"
+                  >
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary"
+                    [disabled]="!newsletterForm.valid">
+                    S'abonner
+                  </button>
+                </div>
+                <div *ngIf="newsletterForm.get('email')?.invalid && newsletterForm.get('email')?.touched" 
+                     class="form-text text-danger text-start mt-1">
+                  Veuillez entrer une adresse email valide
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Component -->
+  <app-footer></app-footer>
+</div>

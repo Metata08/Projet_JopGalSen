@@ -1,0 +1,76 @@
+<header class="topbar bg-white border-bottom py-3 px-4 sticky-top">
+  <div class="d-flex align-items-center justify-content-between">
+    <!-- Search -->
+    <div class="flex-fill" style="max-width: 500px;">
+      <div class="input-group">
+        <span class="input-group-text bg-transparent border-end-0">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="search" class="form-control border-start-0" placeholder="Rechercher...">
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex align-items-center gap-2">
+      <!-- Notifications -->
+      <div class="dropdown">
+        <button class="btn btn-link position-relative text-dark" data-bs-toggle="dropdown">
+          <i class="bi bi-bell fs-5"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end p-0" style="width: 320px;">
+          <div class="dropdown-header fw-bold">Notifications</div>
+          <div class="dropdown-divider"></div>
+          <a *ngFor="let notif of notifications" class="dropdown-item py-3">
+            <div class="small">
+              <p class="fw-semibold mb-1">{{ notif.title }}</p>
+              <p class="text-muted mb-1">{{ notif.description }}</p>
+              <p class="text-muted mb-0">{{ notif.time }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="dropdown">
+        <button class="btn btn-link position-relative text-dark" data-bs-toggle="dropdown">
+          <i class="bi bi-chat-square-text fs-5"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end p-0" style="width: 320px;">
+          <div class="dropdown-header fw-bold">Messages</div>
+          <div class="dropdown-divider"></div>
+          <a *ngFor="let msg of messages" class="dropdown-item py-3">
+            <div class="d-flex align-items-start gap-3">
+              <div class="avatar">{{ msg.avatar }}</div>
+              <div class="flex-fill">
+                <p class="fw-semibold mb-1 small">{{ msg.sender }}</p>
+                <p class="text-muted mb-1 small text-truncate">{{ msg.preview }}</p>
+                <p class="text-muted mb-0 small">{{ msg.time }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="dropdown">
+        <button class="btn btn-link text-dark d-flex align-items-center gap-2 text-decoration-none" data-bs-toggle="dropdown">
+          <div class="avatar">AD</div>
+          <div class="text-start d-none d-md-block">
+            <p class="mb-0 small fw-semibold">Admin</p>
+            <p class="mb-0 text-muted" style="font-size: 0.75rem;">Administrateur</p>
+          </div>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end">
+          <div class="dropdown-header">Mon Compte</div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Paramètres</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
