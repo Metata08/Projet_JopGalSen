@@ -1,0 +1,190 @@
+<div class="min-vh-100 bg-light">
+  <!-- Navigation Component -->
+  <app-navigation></app-navigation>
+  
+  <!-- Hero Section -->
+  <section class="py-5 bg-primary bg-opacity-10">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-12 col-lg-8">
+          <h1 class="display-4 fw-bold text-primary mb-4">
+            Découvrez les entreprises
+          </h1>
+          <p class="lead text-muted mb-0">
+            Explorez les meilleures entreprises du Sénégal et trouvez votre environnement de travail idéal
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Companies Section -->
+  <section class="py-5">
+    <div class="container">
+      <!-- Header avec recherche et filtres -->
+      <div class="row align-items-center mb-5">
+        <div class="col-12 col-md-6">
+          <h2 class="h1 fw-bold mb-0">Entreprises partenaires</h2>
+        </div>
+        <div class="col-12 col-md-6 text-md-end">
+          <button class="btn btn-outline-primary" (click)="onViewAllEntreprises()">
+            Voir toutes les entreprises
+          </button>
+        </div>
+      </div>
+
+      <!-- Barre de recherche et filtres -->
+      <div class="row mb-4">
+        <div class="col-12 col-md-6 mb-3">
+          <div class="input-group">
+            <span class="input-group-text bg-white">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Rechercher une entreprise, un secteur..."
+              (input)="onSearch($event)"
+            >
+          </div>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <select class="form-select" (change)="filterBySector($any($event.target).value)">
+            <option value="all">Tous les secteurs</option>
+            <option *ngFor="let sector of sectors" [value]="sector">
+              {{ sector }}
+            </option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <select class="form-select" (change)="filterByLocation($any($event.target).value)">
+            <option value="all">Toutes les localisations</option>
+            <option *ngFor="let location of locations" [value]="location">
+              {{ location }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2 text-muted">Chargement des entreprises...</p>
+      </div>
+
+      <!-- Grille des entreprises -->
+      <div *ngIf="!isLoading" class="row g-4">
+        <div class="col-12 col-lg-6" *ngFor="let entreprise of filteredEntreprises">
+          <div class="card border-0 shadow-sm hover-shadow h-100">
+            <div class="card-body p-4">
+              <!-- En-tête de l'entreprise -->
+              <div class="row align-items-start mb-3">
+                <div class="col-auto">
+                  <div class="display-4">{{ entreprise.logo }}</div>
+                </div>
+                <div class="col">
+                  <h3 class="h4 fw-bold text-dark mb-2">{{ entreprise.name }}</h3>
+                  
+                  <!-- Rating et étoiles -->
+                  <div class="d-flex align-items-center mb-2">
+                    <div class="d-flex align-items-center me-2">
+                      <span *ngFor="let star of generateStars(entreprise.rating)" 
+                            class="me-1">
+                        <i [class]="star"></i>
+                      </span>
+                    </div>
+                    <span class="text-muted small">{{ entreprise.rating }}</span>
+                  </div>
+                  
+                  <!-- Secteur -->
+                  <span class="badge" [class]="getSectorBadgeClass(entreprise.sector)">
+                    {{ entreprise.sector }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Informations de localisation et employés -->
+              <div class="row mb-3">
+                <div class="col-12 col-md-6">
+                  <div class="d-flex align-items-center text-muted mb-2">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    {{ entreprise.location }}
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="d-flex align-items-center text-muted mb-2">
+                    <i class="bi bi-people me-2"></i>
+                    {{ entreprise.employees }} employés
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <p class="text-muted mb-4">{{ entreprise.description }}</p>
+
+              <!-- Footer avec postes ouverts et actions -->
+              <div class="row align-items-center">
+                <div class="col">
+                  <div class="d-flex align-items-center text-primary fw-medium">
+                    <i class="bi bi-building me-2"></i>
+                    {{ entreprise.openJobs }} postes ouverts
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary btn-sm" 
+                            (click)="onFollowEntreprise(entreprise)">
+                      Suivre
+                    </button>
+                    <button class="btn btn-primary btn-sm" 
+                            (click)="onViewJobs(entreprise)">
+                      Voir les offres
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message si aucun résultat -->
+      <div *ngIf="!isLoading && filteredEntreprises.length === 0" class="text-center py-5">
+        <div class="text-muted">
+          <i class="bi bi-building display-1"></i>
+          <h3 class="mt-3">Aucune entreprise trouvée</h3>
+          <p>Essayez de modifier vos critères de recherche</p>
+          <button class="btn btn-primary mt-3" (click)="onViewAllEntreprises()">
+            Voir toutes les entreprises
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-5 bg-secondary bg-opacity-10">
+    <div class="container">
+      <div class="row justify-content-center text-center mb-5">
+        <div class="col-12 col-lg-8">
+          <h2 class="h1 fw-bold mb-3">Pourquoi choisir nos partenaires ?</h2>
+          <p class="lead text-muted">
+            Des entreprises sélectionnées pour leur excellence et leur engagement
+          </p>
+        </div>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-3 text-center" *ngFor="let stat of stats">
+          <div class="display-4 fw-bold text-primary mb-2">{{ stat.value }}</div>
+          <div class="text-muted">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Component -->
+  <app-footer></app-footer>
+</div>

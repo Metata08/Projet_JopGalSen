@@ -1,0 +1,15 @@
+<div class="min-vh-100 d-flex bg-light">
+  <!-- Sidebar -->
+  <app-sidebar [isOpen]="sidebarOpen" (toggleSidebar)="toggleSidebar()"></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-fill d-flex flex-column transition-all" [ngClass]="sidebarOpen ? 'ms-sidebar-open' : 'ms-sidebar-closed'">
+    <!-- Topbar -->
+    <app-topbar></app-topbar>
+
+    <!-- Page Content -->
+    <main class="flex-fill p-4 overflow-auto bg-light">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

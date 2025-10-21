@@ -1,0 +1,263 @@
+<div class="min-h-screen bg-light">
+  <div class="container py-4">
+    <div class="row g-4">
+      <!-- Profile Sidebar -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm sticky-top">
+          <div class="card-body text-center p-4">
+            <div class="position-relative mb-4">
+              <div class="profile-avatar mx-auto mb-3">
+                <img src="/assets/placeholder.svg" alt="Profile" class="rounded-circle" width="96" height="96">
+                <button class="btn btn-outline-primary btn-sm position-absolute bottom-0 start-50 translate-middle-x camera-btn">
+                  <i class="fas fa-camera"></i>
+                </button>
+              </div>
+            </div>
+            
+            <h4 class="fw-semibold mb-1">Aminata Diallo</h4>
+            <p class="text-muted mb-4">Développeuse Frontend</p>
+            
+            <div class="contact-info mb-4">
+              <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <i class="fas fa-map-marker-alt text-muted"></i>
+                <small class="text-muted">Dakar, Sénégal</small>
+              </div>
+              <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <i class="fas fa-envelope text-muted"></i>
+                <small class="text-muted">aminata.dialloemail.com</small>
+              </div>
+              <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <i class="fas fa-phone text-muted"></i>
+                <small class="text-muted">+221 77 123 45 67</small>
+              </div>
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <i class="fas fa-calendar text-muted"></i>
+                <small class="text-muted">Membre depuis Jan 2024</small>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary gradient-primary">
+                <i class="fas fa-download me-2"></i>
+                Télécharger CV
+              </button>
+              <button class="btn btn-outline-primary">
+                <i class="fas fa-upload me-2"></i>
+                Mettre à jour CV
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-8">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h2 class="fw-bold mb-0">Mon Profil</h2>
+          <button 
+            class="btn" 
+            [class]="isEditing ? 'btn-outline-secondary' : 'btn-primary gradient-primary'"
+            (click)="toggleEdit()">
+            <i [class]="isEditing ? 'fas fa-times' : 'fas fa-edit'" class="me-2"></i>
+            {{ isEditing ? 'Annuler' : 'Modifier' }}
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="profile-tabs mb-4">
+          <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+              <a class="nav-link" 
+                 [class.active]="activeTab === 'about'"
+                 (click)="setActiveTab('about')">À propos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" 
+                 [class.active]="activeTab === 'experience'"
+                 (click)="setActiveTab('experience')">Expérience</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" 
+                 [class.active]="activeTab === 'education'"
+                 (click)="setActiveTab('education')">Formation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" 
+                 [class.active]="activeTab === 'skills'"
+                 (click)="setActiveTab('skills')">Compétences</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+          <!-- About Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'about'">
+            <div class="card shadow-sm">
+              <div class="card-header">
+                <h5 class="card-title mb-1">Informations personnelles</h5>
+                <p class="card-text text-muted mb-0">Gérez vos informations de base et vos préférences</p>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Prénom</label>
+                    <input type="text" class="form-control" value="Aminata" [disabled]="!isEditing">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-control" value="Diallo" [disabled]="!isEditing">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="aminata.diallo@email.com" [disabled]="!isEditing">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="form-control" value="+221 77 123 45 67" [disabled]="!isEditing">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Localisation</label>
+                    <select class="form-select" [disabled]="!isEditing">
+                      <option selected>Dakar, Sénégal</option>
+                      <option>Thiès, Sénégal</option>
+                      <option>Saint-Louis, Sénégal</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Biographie</label>
+                    <textarea 
+                      class="form-control" 
+                      rows="4" 
+                      [disabled]="!isEditing"
+                      placeholder="Parlez-nous de vous, vos passions, vos objectifs professionnels...">Développeuse frontend passionnée avec 2 ans d'expérience. Spécialisée dans React et TypeScript. Toujours à la recherche de nouveaux défis et d'opportunités d'apprentissage.</textarea>
+                  </div>
+                </div>
+                
+                <div class="mt-4" *ngIf="isEditing">
+                  <button class="btn btn-primary gradient-primary" (click)="saveProfile()">
+                    <i class="fas fa-save me-2"></i>
+                    Sauvegarder
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'experience'">
+            <div class="card shadow-sm">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title mb-1">Expérience professionnelle</h5>
+                  <p class="card-text text-muted mb-0">Votre parcours professionnel et vos réalisations</p>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" *ngIf="isEditing">
+                  <i class="fas fa-plus me-2"></i>
+                  Ajouter
+                </button>
+              </div>
+              <div class="card-body">
+                <div *ngFor="let exp of experiences; let last = last" 
+                     class="experience-item" 
+                     [class.border-bottom]="!last">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <h6 class="fw-semibold mb-1">{{ exp.title }}</h6>
+                      <p class="text-primary fw-medium mb-1">{{ exp.company }}</p>
+                      <small class="text-muted">{{ exp.location }}</small>
+                    </div>
+                    <div class="text-end">
+                      <small class="fw-medium">{{ exp.startDate }} - {{ exp.endDate }}</small>
+                      <button class="btn btn-ghost btn-sm ms-2" *ngIf="isEditing">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <p class="text-muted small">{{ exp.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Education Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'education'">
+            <div class="card shadow-sm">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title mb-1">Formation</h5>
+                  <p class="card-text text-muted mb-0">Votre parcours académique et certifications</p>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" *ngIf="isEditing">
+                  <i class="fas fa-plus me-2"></i>
+                  Ajouter
+                </button>
+              </div>
+              <div class="card-body">
+                <div *ngFor="let edu of education; let last = last" 
+                     class="education-item" 
+                     [class.border-bottom]="!last">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <h6 class="fw-semibold mb-1">{{ edu.degree }}</h6>
+                      <p class="text-primary fw-medium mb-1">{{ edu.school }}</p>
+                      <small class="text-muted">{{ edu.location }}</small>
+                    </div>
+                    <div class="text-end">
+                      <small class="fw-medium">{{ edu.year }}</small>
+                      <span class="badge bg-secondary ms-2">{{ edu.mention }}</span>
+                      <button class="btn btn-ghost btn-sm ms-2" *ngIf="isEditing">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'skills'">
+            <div class="card shadow-sm">
+              <div class="card-header">
+                <h5 class="card-title mb-1">Compétences</h5>
+                <p class="card-text text-muted mb-0">Vos compétences techniques et soft skills</p>
+              </div>
+              <div class="card-body">
+                <div class="d-flex gap-2 mb-4" *ngIf="isEditing">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Ajouter une compétence"
+                    [(ngModel)]="newSkill"
+                    (keypress)="onKeyPress($event)">
+                  <button class="btn btn-outline-primary" (click)="addSkill()">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                
+                <div class="skills-container">
+                  <span *ngFor="let skill of skills" class="badge bg-light text-dark me-2 mb-2 skill-badge">
+                    {{ skill }}
+                    <button 
+                      *ngIf="isEditing" 
+                      class="btn-close btn-close-sm ms-2" 
+                      (click)="removeSkill(skill)">
+                    </button>
+                  </span>
+                </div>
+                
+                <div class="mt-4" *ngIf="isEditing">
+                  <button class="btn btn-primary gradient-primary" (click)="saveProfile()">
+                    <i class="fas fa-save me-2"></i>
+                    Sauvegarder
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
