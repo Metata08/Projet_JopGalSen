@@ -90,18 +90,20 @@
               <td>{{ job.date }}</td>
               <td class="text-end">
                 <div class="btn-group btn-group-sm">
-                  <button *ngIf="job.status === 'pending'" class="btn btn-outline-success" title="Approuver">
-                    <i class="bi bi-check-circle"></i>
-                  </button>
-                  <button *ngIf="job.status === 'pending'" class="btn btn-outline-danger" title="Rejeter">
-                    <i class="bi bi-x-circle"></i>
-                  </button>
-                  <button class="btn btn-outline-primary" title="Voir">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                  <button class="btn btn-outline-danger" title="Supprimer">
-                    <i class="bi bi-trash"></i>
-                  </button>
+                  <button *ngIf="job.status === 'pending'" class="btn btn-outline-success" title="Approuver"
+                        (click)="approveJob(job.id)">
+                  <i class="bi bi-check-circle"></i>
+                </button>
+                <button *ngIf="job.status === 'pending'" class="btn btn-outline-danger" title="Rejeter"
+                        (click)="rejectJob(job.id)">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+                <button class="btn btn-outline-primary" title="Voir">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-outline-danger" title="Supprimer" (click)="deleteJob(job.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
                 </div>
               </td>
             </tr>

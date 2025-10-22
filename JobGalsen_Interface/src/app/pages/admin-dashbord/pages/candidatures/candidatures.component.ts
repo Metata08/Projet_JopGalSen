@@ -1,15 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Application {
-  id: number;
-  candidate: string;
-  job: string;
-  company: string;
-  status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
-  date: string;
-}
+import { AdminService, Application } from '../../services/admin-service.service';
 
 @Component({
   selector: 'app-candidatures',
@@ -18,28 +10,49 @@ interface Application {
   templateUrl: './candidatures.component.html',
   styleUrls: ['./candidatures.component.css']
 })
-export class AdminCandidaturesComponent {
-  searchTerm = '';
-  
-  mockApplications: Application[] = [
-    { id: 1, candidate: 'Fatou Diallo', job: 'Développeur Full Stack', company: 'Tech Solutions', status: 'pending', date: '2024-01-15' },
-    { id: 2, candidate: 'Mamadou Seck', job: 'Designer UI/UX', company: 'Creative Agency', status: 'reviewed', date: '2024-01-14' },
-    { id: 3, candidate: 'Aissatou Fall', job: 'Chef de Projet', company: 'Business Corp', status: 'accepted', date: '2024-01-13' },
-    { id: 4, candidate: 'Ousmane Ba', job: 'Analyste Financier', company: 'Finance Group', status: 'rejected', date: '2024-01-12' },
-    { id: 5, candidate: 'Khadija Ndiaye', job: 'Responsable Marketing', company: 'Marketing Pro', status: 'pending', date: '2024-01-11' }
-  ];
+export class AdminCandidaturesComponent implements OnInit {
 
+  searchTerm = '';
+  applications: Application[] = [];
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit(): void {
+    this.loadApplications();
+  }
+
+  // Chargement des candidatures depuis le service
+  loadApplications(): void {
+    this.adminService.getApplications().subscribe({
+      next: (data) => this.applications = data,
+      error: (err) => console.error('Erreur lors du chargement des candidatures', err)
+    });
+  }
+
+  // Mise à jour du statut d’une candidature
+  updateStatus(id: number, status: Application['status']): void {
+    this.adminService.updateApplicationStatus(id, status).subscribe({
+      next: () => {
+        const app = this.applications.find(a => a.id === id);
+        if (app) app.status = status;
+      },
+      error: (err) => console.error('Erreur lors de la mise à jour du statut', err)
+    });
+  }
+
+  // Filtres dynamiques
   get filteredApplications(): Application[] {
-    return this.mockApplications.filter(app =>
+    return this.applications.filter(app =>
       app.candidate.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       app.job.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
-  get totalApplications(): number { return this.mockApplications.length; }
-  get pendingApplications(): number { return this.mockApplications.filter(a => a.status === 'pending').length; }
-  get acceptedApplications(): number { return this.mockApplications.filter(a => a.status === 'accepted').length; }
-  get rejectedApplications(): number { return this.mockApplications.filter(a => a.status === 'rejected').length; }
+  // Statistiques dynamiques
+  get totalApplications(): number { return this.applications.length; }
+  get pendingApplications(): number { return this.applications.filter(a => a.status === 'pending').length; }
+  get acceptedApplications(): number { return this.applications.filter(a => a.status === 'accepted').length; }
+  get rejectedApplications(): number { return this.applications.filter(a => a.status === 'rejected').length; }
 
   getInitials(name: string): string {
     return name.split(' ').map(word => word[0]).join('').toUpperCase();

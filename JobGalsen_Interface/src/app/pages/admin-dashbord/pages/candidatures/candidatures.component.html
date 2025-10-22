@@ -96,6 +96,12 @@
                   <button class="btn btn-outline-success" title="Télécharger CV">
                     <i class="bi bi-download"></i>
                   </button>
+                  <button class="btn btn-outline-success" title="Accepter" (click)="updateStatus(app.id, 'accepted')">
+                    <i class="bi bi-check-circle"></i>
+                  </button>
+                  <button class="btn btn-outline-danger" title="Rejeter" (click)="updateStatus(app.id, 'rejected')">
+                    <i class="bi bi-x-circle"></i>
+                  </button>
                 </div>
               </td>
             </tr>

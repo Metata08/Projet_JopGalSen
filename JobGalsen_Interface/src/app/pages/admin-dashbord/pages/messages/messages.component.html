@@ -19,7 +19,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <p class="text-muted small mb-1">Total messages</p>
-          <h3 class="fw-bold mb-0">{{ mockMessages.length }}</h3>
+          <h3 class="fw-bold mb-0">{{ messages.length }}</h3>
         </div>
       </div>
     </div>
@@ -48,16 +48,16 @@
           </div>
         </div>
         <div class="card-body p-0 messages-list">
-          <div *ngFor="let message of mockMessages" 
-               (click)="selectMessage(message)"
-               class="message-item p-3 border-bottom cursor-pointer"
-               [ngClass]="{'message-unread': message.unread, 'active': selectedMessage?.id === message.id}">
+          <div *ngFor="let message of filteredMessages" 
+              (click)="selectMessage(message)"
+              class="message-item p-3 border-bottom cursor-pointer"
+              [ngClass]="{'message-unread': message.unread, 'active': selectedMessage?.id === message.id}">
             <div class="d-flex align-items-start gap-3">
               <div class="user-avatar">{{ getInitials(message.sender) }}</div>
               <div class="flex-fill min-w-0">
                 <div class="d-flex justify-content-between align-items-start">
                   <p class="fw-semibold mb-1 small">{{ message.sender }}</p>
-                  <span class="text-muted" style="font-size: 0.75rem;">{{ message.time }}</span>
+                  <span class="text-muted" style="font-size: 0.75rem;">{{ message.date }}</span>
                 </div>
                 <p class="text-muted mb-0 small text-truncate">{{ message.preview }}</p>
               </div>

@@ -1,14 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Message {
-  id: number;
-  sender: string;
-  preview: string;
-  time: string;
-  unread: boolean;
-}
+import { AdminService, Message } from '../../services/admin-service.service';
 
 @Component({
   selector: 'app-messages',
@@ -17,40 +10,60 @@ interface Message {
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css']
 })
-export class AdminMessagesComponent {
+export class AdminMessagesComponent implements OnInit {
+
   searchTerm = '';
   messageText = '';
   selectedMessage: Message | null = null;
+  messages: Message[] = [];
 
-  mockMessages: Message[] = [
-    { id: 1, sender: 'Fatou Diallo', preview: "Bonjour, j'ai une question concernant...", time: '10:30', unread: true },
-    { id: 2, sender: 'Mamadou Seck', preview: 'Merci pour votre aide avec la publication...', time: '09:15', unread: false },
-    { id: 3, sender: 'Aissatou Fall', preview: 'Je voudrais modifier mon profil...', time: 'Hier', unread: true },
-    { id: 4, sender: 'Ousmane Ba', preview: "Concernant l'offre que j'ai publiée...", time: 'Hier', unread: false },
-    { id: 5, sender: 'Khadija Ndiaye', preview: 'Pouvez-vous m\'aider avec...', time: '2 jours', unread: false }
-  ];
+  constructor(private adminService: AdminService) {}
 
-  get unreadCount(): number {
-    return this.mockMessages.filter(m => m.unread).length;
+  ngOnInit(): void {
+    // Chargement initial des messages
+    this.loadMessages();
   }
 
-  get activeConversations(): number {
-    return 3;
+  loadMessages(): void {
+    this.adminService.getMessages().subscribe({
+      next: (data) => this.messages = data,
+      error: (err) => console.error('Erreur lors du chargement des messages', err)
+    });
+  }
+
+  selectMessage(message: Message): void {
+    this.selectedMessage = message;
+    if (message.unread) {
+      this.adminService.markMessageAsRead(message.id).subscribe({
+        next: () => message.unread = false,
+        error: (err) => console.error('Erreur lors de la mise à jour du message', err)
+      });
+    }
   }
 
   getInitials(name: string): string {
     return name.split(' ').map(word => word[0]).join('').toUpperCase();
   }
 
-  selectMessage(message: Message): void {
-    this.selectedMessage = message;
-    message.unread = false;
-  }
-
   sendMessage(): void {
     if (this.messageText.trim()) {
-      console.log('Sending message:', this.messageText);
+      console.log('Message envoyé :', this.messageText);
       this.messageText = '';
     }
+  }
+
+  get unreadCount(): number {
+    return this.messages.filter(m => m.unread).length;
+  }
+
+  get activeConversations(): number {
+    return this.messages.length > 0 ? 3 : 0;
+  }
+
+  get filteredMessages(): Message[] {
+    return this.messages.filter(m =>
+      m.sender.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      m.preview.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 }

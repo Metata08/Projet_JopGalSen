@@ -1,15 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: 'Candidat' | 'Recruteur';
-  status: 'active' | 'inactive';
-  joinDate: string;
-}
+import { AdminService, User } from '../../services/admin-service.service';
 
 @Component({
   selector: 'app-utilisateurs',
@@ -18,28 +10,52 @@ interface User {
   templateUrl: './utilisateurs.component.html',
   styleUrls: ['./utilisateurs.component.css']
 })
-export class AdminUtilisateursComponent {
-  searchTerm = '';
-  
-  mockUsers: User[] = [
-    { id: 1, name: 'Fatou Diallo', email: 'fatou@email.com', role: 'Candidat', status: 'active', joinDate: '2024-01-15' },
-    { id: 2, name: 'Mamadou Seck', email: 'mamadou@company.sn', role: 'Recruteur', status: 'active', joinDate: '2024-01-14' },
-    { id: 3, name: 'Aissatou Fall', email: 'aissatou@email.com', role: 'Candidat', status: 'inactive', joinDate: '2024-01-12' },
-    { id: 4, name: 'Ousmane Ba', email: 'ousmane@startup.sn', role: 'Recruteur', status: 'active', joinDate: '2024-01-10' },
-    { id: 5, name: 'Khadija Ndiaye', email: 'khadija@email.com', role: 'Candidat', status: 'active', joinDate: '2024-01-08' }
-  ];
+export class AdminUtilisateursComponent implements OnInit {
 
+  searchTerm = '';
+  users: User[] = [];
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit(): void {
+    // Chargement initial des utilisateurs
+    this.loadUsers();
+  }
+
+  // Chargement des utilisateurs depuis le service
+  loadUsers(): void {
+    this.adminService.getUsers().subscribe({
+      next: (data) => this.users = data,
+      error: (err) => console.error('Erreur lors du chargement des utilisateurs', err)
+    });
+  }
+
+  // Suppression d’un utilisateur
+  deleteUser(id: number): void {
+    const confirmDelete = confirm('Voulez-vous vraiment supprimer cet utilisateur ?');
+    if (confirmDelete) {
+      this.adminService.deleteUser(id).subscribe({
+        next: () => {
+          this.users = this.users.filter(u => u.id !== id);
+        },
+        error: (err) => console.error('Erreur lors de la suppression', err)
+      });
+    }
+  }
+
+  // Filtres de recherche dynamiques
   get filteredUsers(): User[] {
-    return this.mockUsers.filter(user =>
+    return this.users.filter(user =>
       user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
-  get totalUsers(): number { return this.mockUsers.length; }
-  get candidats(): number { return this.mockUsers.filter(u => u.role === 'Candidat').length; }
-  get recruteurs(): number { return this.mockUsers.filter(u => u.role === 'Recruteur').length; }
-  get activeUsers(): number { return this.mockUsers.filter(u => u.status === 'active').length; }
+  // Statistiques dynamiques
+  get totalUsers(): number { return this.users.length; }
+  get candidats(): number { return this.users.filter(u => u.role === 'Candidat').length; }
+  get recruteurs(): number { return this.users.filter(u => u.role === 'Recruteur').length; }
+  get activeUsers(): number { return this.users.filter(u => u.status === 'active').length; }
 
   getInitials(name: string): string {
     return name.split(' ').map(word => word[0]).join('').toUpperCase();
