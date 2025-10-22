@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecruteurHeaderComponent } from '../../ui/recruteur-header/recruteur-header.component';
-import { RecruteurService } from '../../recruteur.service';
+import { RecruteurService } from './service/recruteur.service';
 import { Job, Candidate, Stats } from '../../models/job.model';
 
 
