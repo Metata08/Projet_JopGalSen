@@ -8,9 +8,8 @@ import {
   AbstractControl 
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../auth.service';
-import { catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { AuthService, UserRole } from '../../auth.service';
+import { catchError, of } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -29,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class AuthComponent {
   showPassword = false;
-  userType: 'candidate' | 'recruteur' = 'candidate';
+  userType: UserRole = 'candidat';
   activeTab: 'login' | 'register' = 'login';
   errorMessage: string | null = null;
 
@@ -48,7 +47,7 @@ export class AuthComponent {
     });
 
     this.registerForm = this.fb.group({
-      userType: ['candidate'],
+      userType: ['candidat'],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -73,7 +72,6 @@ export class AuthComponent {
     const hasNumber = /[0-9]/.test(value);
     const hasUpper = /[A-Z]/.test(value);
     const hasLower = /[a-z]/.test(value);
-    
     const valid = hasNumber && hasUpper && hasLower;
     return valid ? null : { weakPassword: true };
   }
@@ -84,48 +82,51 @@ export class AuthComponent {
 
   onLoginSubmit(): void {
     if (this.loginForm.invalid) return;
-  
+
     this.errorMessage = null;
-    
     const { email, password, rememberMe } = this.loginForm.value;
-    
+
     this.authService.login(email, password, rememberMe)
       .pipe(
         catchError(error => {
-          this.errorMessage = error.message || 'Erreur de connexion';
+          this.errorMessage = (error.error?.message) || error.message || 'Erreur de connexion';
           return of(null);
         })
       )
-      .subscribe(response => {
-        if (response) {
-          this.router.navigate([this.userType === 'recruteur' ? '/recruteur-dashbord' : '/candidat-dashbord']);
+      .subscribe(user => {
+        if (user) {
+          const role = user.role || 'candidat';
+          const route = role === 'recruteur' ? '/recruteur-dashbord' : '/candidat-dashbord';
+          this.router.navigate([route]);
         }
       });
   }
 
   onRegisterSubmit(): void {
     if (this.registerForm.invalid) return;
-    
+
     this.errorMessage = null;
-    
     const formValue = this.registerForm.value;
     const userData = {
-      ...formValue,
-      role: formValue.userType
+      email: formValue.email,
+      password: formValue.password,
+      name: `${formValue.firstName} ${formValue.lastName}`,
+      role: formValue.userType as UserRole,
+      // Ajoute d'autres champs si nécessaire pour le register backend
     };
-    
+
     this.authService.register(userData)
       .pipe(
         catchError(error => {
-          this.errorMessage = error.message || "Erreur lors de l'inscription";
+          this.errorMessage = (error.error?.message) || error.message || "Erreur lors de l'inscription";
           return of(null);
         })
       )
-      .subscribe(response => {
-        if (response) {
+      .subscribe(user => {
+        if (user) {
           this.activeTab = 'login';
           this.loginForm.patchValue({
-            email: userData.email,
+            email: user.email,
             password: ''
           });
         }
