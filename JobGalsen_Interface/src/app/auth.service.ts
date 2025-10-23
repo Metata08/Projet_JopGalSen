@@ -71,7 +71,7 @@ export class AuthService {
   register(userData: RegisterData): Observable<User | null> {
     return this.http.post<LoginResponse>(this.registerUrl, userData).pipe(
       tap(response => {
-        this.storeToken(response.idToken, false);
+        //this.storeToken(response.idToken, false);
         const userWithRole = this.addRoleToUser(response.user, response.role);
         this.currentUserSubject.next(userWithRole);
         this.saveUserToStorage(userWithRole);
