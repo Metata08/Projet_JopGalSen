@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+
+
 import { AccueilComponent } from './pages/accueil/accueil.component';
 import { AProposComponent } from './pages/a-propos/a-propos.component';
 import { OffresComponent } from './pages/offres/offres.component';
@@ -33,6 +35,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
+    
     { path: '', redirectTo: 'accueil', pathMatch: 'full' },
     { path: 'accueil', component: AccueilComponent },
     { path: 'a-propos', component: AProposComponent },

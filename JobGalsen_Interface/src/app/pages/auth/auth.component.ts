@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
-  FormBuilder, 
-  FormGroup, 
-  Validators, 
-  ReactiveFormsModule,
-  AbstractControl 
+  FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl 
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, UserRole } from '../../auth.service';
@@ -24,7 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
   ],
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent {
   showPassword = false;
@@ -95,8 +91,14 @@ export class AuthComponent {
       )
       .subscribe(user => {
         if (user) {
-          const role = user.role || 'candidat';
-          const route = role === 'recruteur' ? '/recruteur-dashbord' : '/candidat-dashbord';
+          const role = user.role || this.authService.getUserRole() || '';
+          let route = '/auth';
+          switch (role) {
+            case 'admin': route = '/admin'; break;
+            case 'recruteur': route = '/recruteur'; break;
+            case 'candidat': route = '/candidat'; break;
+            default: route = '/auth'; break;
+          }
           this.router.navigate([route]);
         }
       });
@@ -112,7 +114,6 @@ export class AuthComponent {
       password: formValue.password,
       name: `${formValue.firstName} ${formValue.lastName}`,
       role: formValue.userType as UserRole,
-      // Ajoute d'autres champs si nécessaire pour le register backend
     };
 
     this.authService.register(userData)

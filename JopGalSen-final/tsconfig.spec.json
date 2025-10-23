@@ -5,6 +5,7 @@
     "composite": true,
     "declaration": true,
     "outDir": "target/out-tsc/spec",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "noEmit": false
   }
 }

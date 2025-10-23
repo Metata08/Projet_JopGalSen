@@ -1,19 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, switchMap, tap, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 export type UserRole = 'admin' | 'recruteur' | 'candidat' | '';
 
 interface User {
-  id: string;
+  id: number;
+  login: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  name?: string;
+  activated?: boolean;
+  langKey?: string;
+  imageUrl?: string;
+  resetDate?: string | null;
+  authorities?: string[];
   role?: UserRole;
 }
 
+interface LoginResponse {
+  idToken: string;
+  user: User;
+  role: string; // rôle reçu dans la réponse explicite
+}
+
 interface LoginData {
-  username: string; // ici, ce n'est plus email !
+  username: string;
   password: string;
   rememberMe: boolean;
 }
@@ -23,15 +37,13 @@ interface RegisterData {
   password: string;
   name?: string;
   role?: UserRole;
-  // autres champs possibles
 }
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-
   private loginUrl = 'http://localhost:8080/api/authenticate';
   private registerUrl = 'http://localhost:8080/api/register';
-  private connectedUserUrl = 'http://localhost:8080/api/account';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
 
@@ -39,44 +51,16 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-  /** Connexion utilisateur : obtient token puis récupère utilisateur */
-  login(email: string, password: string, rememberMe: boolean): Observable<User> {
-    const loginData = {
-      username: email,  // clé must be 'username'
-      password,
-      rememberMe
-    };
-    console.log(loginData);
-    return this.http.post<{ token: string }>(this.loginUrl, loginData).pipe(
-      tap(response => this.storeToken(response.token, rememberMe)),
-      switchMap(() => this.getCurrentUserAccount()),
-      catchError(error => {
-        this.clearAuthData();
-        return throwError(() => error);
-      })
-    );
-  }
-
-
-  /** Inscription utilisateur */
-  register(userData: RegisterData): Observable<User> {
-    return this.http.post<{ token: string }>(this.registerUrl, userData).pipe(
-      tap(response => this.storeToken(response.token, false)),
-      switchMap(() => this.getCurrentUserAccount()),
-      catchError(error => {
-        this.clearAuthData();
-        return throwError(() => error);
-      })
-    );
-  }
-
-  /** Récupérer les infos du compte connecté avec token stocké */
-  getCurrentUserAccount(): Observable<User> {
-    return this.http.get<User>(this.connectedUserUrl).pipe(
-      tap(user => {
-        this.currentUserSubject.next(user);
-        this.saveUserToStorage(user);
+  login(email: string, password: string, rememberMe: boolean): Observable<User | null> {
+    const loginData = { username: email, password, rememberMe };
+    return this.http.post<LoginResponse>(this.loginUrl, loginData).pipe(
+      tap(response => {
+        this.storeToken(response.idToken, rememberMe);
+        const userWithRole = this.addRoleToUser(response.user, response.role);
+        this.currentUserSubject.next(userWithRole);
+        this.saveUserToStorage(userWithRole);
       }),
+      map(response => this.addRoleToUser(response.user, response.role)),
       catchError(error => {
         this.clearAuthData();
         return throwError(() => error);
@@ -84,49 +68,71 @@ export class AuthService {
     );
   }
 
-  /** Déconnexion */
+  register(userData: RegisterData): Observable<User | null> {
+    return this.http.post<LoginResponse>(this.registerUrl, userData).pipe(
+      tap(response => {
+        this.storeToken(response.idToken, false);
+        const userWithRole = this.addRoleToUser(response.user, response.role);
+        this.currentUserSubject.next(userWithRole);
+        this.saveUserToStorage(userWithRole);
+      }),
+      map(response => this.addRoleToUser(response.user, response.role)),
+      catchError(error => {
+        this.clearAuthData();
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private addRoleToUser(user: User, role: string): User {
+    // Utilise le role fourni par l'API (string comme ROLE_USER), mappe vers UserRole si besoin
+    switch (role) {
+      case 'ROLE_ADMIN':
+        user.role = 'admin';
+        break;
+      case 'ROLE_RECRUTEUR':
+        user.role = 'recruteur';
+        break;
+      case 'ROLE_USER':
+        user.role = 'candidat';
+        break;
+      default:
+        user.role = '';
+    }
+    return user;
+  }
+
   logout(): void {
     this.clearAuthData();
     this.router.navigate(['/auth']);
   }
 
-  /** Observable sur l’utilisateur courant */
   get currentUser$(): Observable<User | null> {
     return this.currentUserSubject.asObservable();
   }
 
-  /** Accès valeur actuelle de l’utilisateur */
   get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
 
-  /** Récupération du token */
   get token(): string | null {
     return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
   }
 
-  /** Vérification d’authentification */
   isAuthenticated(): boolean {
     return !!this.token;
   }
 
-  /** Stockage sécurisé du token */
-  private storeToken(token: string, remember: boolean): void {
+  private storeToken(token: string, remember: boolean) {
     const storage = remember ? localStorage : sessionStorage;
     storage.setItem('auth_token', token);
   }
 
-  /** Sauvegarde utilisateur après /api/account */
   private saveUserToStorage(user: User): void {
-    // On stocke aussi l'objet utilisateur
-    if (localStorage.getItem('auth_token')) {
-      localStorage.setItem('current_user', JSON.stringify(user));
-    } else {
-      sessionStorage.setItem('current_user', JSON.stringify(user));
-    }
+    const storage = localStorage.getItem('auth_token') ? localStorage : sessionStorage;
+    storage.setItem('current_user', JSON.stringify(user));
   }
 
-  /** Nettoyage du token et données utilisateur */
   private clearAuthData(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('current_user');
@@ -135,33 +141,22 @@ export class AuthService {
     this.currentUserSubject.next(null);
   }
 
-  /** Chargement utilisateur depuis stockage */
   private loadUserFromStorage(): void {
     const userJson = localStorage.getItem('current_user') || sessionStorage.getItem('current_user');
     if (userJson) {
       try {
-        const user = JSON.parse(userJson);
+        const user = JSON.parse(userJson) as User;
         this.currentUserSubject.next(user);
       } catch (e) {
-        console.error('Failed to parse user data', e);
         this.clearAuthData();
       }
     }
   }
 
-  /** Récupérer le rôle utilisateur */
   getUserRole(): UserRole {
-    const userJson = localStorage.getItem('current_user') || sessionStorage.getItem('current_user');
-    if (!userJson) return '';
-    try {
-      const user = JSON.parse(userJson);
-      return user.role || '';
-    } catch {
-      return '';
-    }
+    return this.currentUserSubject.value?.role || '';
   }
 
-  /** Redirection selon rôle (à appeler depuis composant) */
   redirectToDefaultRoute(): void {
     const role = this.getUserRole();
     const routes: Record<UserRole, string> = {
