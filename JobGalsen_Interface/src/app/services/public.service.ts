@@ -1,12 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError, map } from 'rxjs';
 import { delay } from 'rxjs/operators';
-
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 // Import des modèles
 import { Job, MOCK_JOBS } from '../models/job.model';
 import { Entreprise, EntrepriseStats, MOCK_Entreprises, MOCK_Entreprise_STATS } from '../models/entreprise.model';
 import { Conseils, ConseilsCategory, MOCK_Conseils, MOCK_CATEGORIES } from '../models/conseils.model';
 import { TeamMember, CompanyValue, MOCK_TEAM_MEMBERS, MOCK_VALUES } from '../models/a-propos.model';
+
+
+export interface OffreDTO {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  category: string;
+  salary: string;
+  experience: string;
+  description: string;
+  requirements: string;
+  benefits: string;
+  deadline: string;
+  postedDate: string;
+  urgent?: boolean;
+  skills: string[];
+}
 
 /**
  * Service public global pour la gestion des données de l'application
@@ -19,10 +38,13 @@ import { TeamMember, CompanyValue, MOCK_TEAM_MEMBERS, MOCK_VALUES } from '../mod
 })
 export class PublicService {
 
+  //url de l'api backend
+  private  offresUrl = 'http://localhost:8080/api/offres';
+
   // Simulation d'un délai réseau pour les opérations asynchrones
   private readonly NETWORK_DELAY = 300;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   // ===========================================================================
   // MÉTHODES POUR LES OFFRES D'EMPLOI (Jobs) - MISES À JOUR
@@ -32,6 +54,23 @@ export class PublicService {
    * Récupère toutes les offres d'emploi
    * @returns Observable avec la liste des offres
    */
+  getOffres(page = 0, size = 10, sort = 'id,desc', eagerload = true): Observable<OffreDTO[]> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sort', sort)
+      .set('eagerload', eagerload.toString());
+
+    // On utilise HttpResponse pour récupérer aussi les headers si besoin (ex: total count)
+    return this.http.get<OffreDTO[]>(this.offresUrl, { params, observe: 'response' }).pipe(
+      map((res: HttpResponse<OffreDTO[]>) => {
+        // Tu peux récupérer ici les informations de pagination dans res.headers si souhaité
+        // Exemple : const totalCount = res.headers.get('X-Total-Count');
+        // Pour simplicité, on retourne juste le corps
+        return res.body || [];
+      })
+    );
+  }
   getAllJobs(): Observable<Job[]> {
     return of(MOCK_JOBS).pipe(delay(this.NETWORK_DELAY));
   }

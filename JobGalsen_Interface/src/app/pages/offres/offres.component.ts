@@ -67,7 +67,7 @@ export class OffresComponent implements OnInit {
    */
   private loadJobs(): void {
     this.isLoading = true;
-    this.publicService.getAllJobs().subscribe({
+    this.publicService.getOffres().subscribe({
       next: (jobs) => {
         this.jobs = jobs;
         this.filteredJobs = [...jobs];

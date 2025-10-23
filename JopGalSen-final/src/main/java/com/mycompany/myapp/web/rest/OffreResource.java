@@ -71,6 +71,16 @@ public class OffreResource {
             .body(offreDTO);
     }
 
+    /**Recuperer tous les offres 
+    @GetMapping("")
+    public ResponseEntity<List<OffreDTO>> getAllOffres(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get a page of Offres");
+        Page<OffreDTO> page = offreService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }*/
     /**
      * {@code PUT  /offres/:id} : Updates an existing offre.
      *

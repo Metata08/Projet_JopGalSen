@@ -1,62 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
-interface Job {
-  id: number;
-  title: string;
-  company: string;
-  location: string;
-  type: string;
-  salary: string;
-  postedDate: string;
-  applicants: number;
-  description: string;
-  skills: string[];
-}
+import { OffreDTO, PublicService } from '../../services/public.service';
 
 @Component({
   selector: 'app-job-listings-section',
-  imports: [CommonModule],
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './job-listings-section.component.html',
   styleUrls: ['./job-listings-section.component.css']
 })
-export class JobListingsSectionComponent {
-  mockJobs: Job[] = [
-    {
-      id: 1,
-      title: "Développeur Full Stack",
-      company: "TechSen Solutions",
-      location: "Dakar, Sénégal",
-      type: "CDI",
-      salary: "800,000 - 1,200,000 FCFA",
-      postedDate: "Il y a 2 jours",
-      applicants: 12,
-      description: "Nous recherchons un développeur full stack expérimenté pour rejoindre notre équipe...",
-      skills: ["React", "Node.js", "TypeScript", "MongoDB"]
-    },
-    // ... autres jobs du mock
-  ];
+export class JobListingsSectionComponent implements OnInit {
+  offres: OffreDTO[] = [];
 
-  isAuthenticated = false; // À remplacer par la vraie logique d'authentification
+  isAuthenticated = false; // À connecter avec ton système d'authentification
 
-  constructor(private router: Router) {}
+  constructor(private publicService: PublicService, private router: Router) {}
 
-  handleApply(jobId: number) {
+  ngOnInit(): void {
+    this.loadOffres();
+  }
+
+  loadOffres(): void {
+    this.publicService.getOffres(0, 10).subscribe(data => {
+      this.offres = data;
+    });
+  }
+
+  handleApply(id: number): void {
     if (this.isAuthenticated) {
-      console.log(`Application pour le job ${jobId}`);
-      // Logique de candidature
+      console.log(`Candidature pour l'offre ${id}`);
+      // Ajoute ta logique de candidature ici
     } else {
       this.router.navigate(['/auth']);
     }
   }
 
-  handleViewDetails(jobId: number) {
-    this.router.navigate(['/job', jobId]);
+  handleViewDetails(id: number): void {
+    this.router.navigate(['/offres', id]);
   }
 
-  navigateToJobs() {
-    this.router.navigate(['/jobs']);
+  navigateToJobs(): void {
+    this.router.navigate(['/offres']);
   }
 }
