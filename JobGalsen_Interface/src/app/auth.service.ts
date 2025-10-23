@@ -38,6 +38,7 @@ interface RegisterData {
   name?: string;
   role?: UserRole;
 }
+
 @Injectable({
   providedIn: 'root'
 })
@@ -68,21 +69,48 @@ export class AuthService {
     );
   }
 
-  register(userData: RegisterData): Observable<User | null> {
-    return this.http.post<LoginResponse>(this.registerUrl, userData).pipe(
-      tap(response => {
-        //this.storeToken(response.idToken, false);
-        const userWithRole = this.addRoleToUser(response.user, response.role);
-        this.currentUserSubject.next(userWithRole);
-        this.saveUserToStorage(userWithRole);
-      }),
-      map(response => this.addRoleToUser(response.user, response.role)),
-      catchError(error => {
-        this.clearAuthData();
-        return throwError(() => error);
-      })
-    );
-  }
+  register(userData: {
+  login: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  imageUrl?: string;
+  langKey?: string;
+  authorities?: string[];
+  password: string;
+}): Observable<User | null> {
+  // Préparer l'objet à envoyer avec tous les champs requis
+  const payload = {
+    id: 0,                               // id à 0 pour nouvelle inscription
+    login: userData.login,
+    firstName: userData.firstName,
+    lastName: userData.lastName,
+    email: userData.email,
+    imageUrl: userData.imageUrl || '',
+    activated: true,                     // activation directe
+    langKey: userData.langKey || 'fr',
+    createdBy: 'system',                 // ou l’utilisateur courant si possible
+    createdDate: new Date().toISOString(),
+    lastModifiedBy: 'system',
+    lastModifiedDate: new Date().toISOString(),
+    authorities: userData.authorities || ['ROLE_USER'],
+    password: userData.password
+  };
+
+  return this.http.post<LoginResponse>(this.registerUrl, payload).pipe(
+    tap(response => {
+      const userWithRole = this.addRoleToUser(response.user, response.role);
+      this.currentUserSubject.next(userWithRole);
+      this.saveUserToStorage(userWithRole);
+    }),
+    map(response => this.addRoleToUser(response.user, response.role)),
+    catchError(error => {
+      this.clearAuthData();
+      return throwError(() => error);
+    })
+  );
+}
+
 
   private addRoleToUser(user: User, role: string): User {
     // Utilise le role fourni par l'API (string comme ROLE_USER), mappe vers UserRole si besoin

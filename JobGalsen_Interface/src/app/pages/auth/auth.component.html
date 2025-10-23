@@ -78,7 +78,7 @@
             <button type="submit" class="btn btn-primary w-100">
               Se connecter
             </button>
-            <div *ngIf="registerControls['password'].errors?.['weakPassword']" class="text-danger small">
+            <div *ngIf="loginControls['password'].errors?.['weakPassword']" class="text-danger small">
                 Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre
             </div>
           </form>
@@ -189,7 +189,7 @@
               </label>
             </div>
             
-            <button type="submit" class="btn btn-accent w-100">
+            <button type="submit" class="btn btn-accent w-100" [disabled]="registerForm.invalid">
               Créer mon compte
             </button>
           </form>

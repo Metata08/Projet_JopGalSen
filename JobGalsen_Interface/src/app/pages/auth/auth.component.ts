@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { 
   FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl 
 } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, UserRole } from '../../auth.service';
 import { catchError, of } from 'rxjs';
 import { NgIf } from '@angular/common';
@@ -34,7 +34,8 @@ export class AuthComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -57,6 +58,14 @@ export class AuthComponent {
       acceptTerms: [false, Validators.requiredTrue]
     });
   }
+
+  ngOnInit() {
+  this.route.queryParams.subscribe(params => {
+    if (params['email']) {
+      this.loginForm.patchValue({ email: params['email'] });
+    }
+  });
+}
 
   phoneValidator(control: AbstractControl): {[key: string]: any} | null {
     const valid = /^\+?\d{10,15}$/.test(control.value);
@@ -105,34 +114,44 @@ export class AuthComponent {
   }
 
   onRegisterSubmit(): void {
-    if (this.registerForm.invalid) return;
+  if (this.registerForm.invalid) return;
 
-    this.errorMessage = null;
-    const formValue = this.registerForm.value;
-    const userData = {
-      email: formValue.email,
-      password: formValue.password,
-      name: `${formValue.firstName} ${formValue.lastName}`,
-      role: formValue.userType as UserRole,
-    };
+  this.errorMessage = null;
+  const formValue = this.registerForm.value;
+  const nowIso = new Date().toISOString();
 
-    this.authService.register(userData)
-      .pipe(
-        catchError(error => {
-          this.errorMessage = (error.error?.message) || error.message || "Erreur lors de l'inscription";
-          return of(null);
-        })
-      )
-      .subscribe(user => {
-        if (user) {
-          this.activeTab = 'login';
-          this.loginForm.patchValue({
-            email: user.email,
-            password: ''
-          });
-        }
-      });
-  }
+  const userData = {
+    id: 0,
+    login: formValue.email,
+    firstName: formValue.firstName,
+    lastName: formValue.lastName,
+    email: formValue.email,
+    imageUrl: '',
+    activated: 1,
+    langKey: 'fr',
+    createdBy: 'system',
+    createdDate: nowIso,
+    lastModifiedBy: 'system',
+    lastModifiedDate: nowIso,
+    authorities: [formValue.userType === 'recruteur' ? 'ROLE_RECRUTEUR' : 'ROLE_USER'],
+    password: formValue.password
+  };
+
+  this.authService.register(userData)
+    .pipe(
+      catchError(error => {
+        this.errorMessage = (error.error?.message) || error.message || "Erreur lors de l'inscription";
+        return of(null);
+      })
+    )
+    .subscribe(user => {
+      if (user) {
+        // Redirection vers la page login avec email pré-rempli via query params
+        this.router.navigate(['/auth'], { queryParams: { email: user.email } });
+      }
+    });
+}
+
 
   navigateToHome(): void {
     this.router.navigate(['/']);

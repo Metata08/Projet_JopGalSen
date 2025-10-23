@@ -110,6 +110,8 @@ public class UserService {
                     throw new EmailAlreadyUsedException();
                 }
             });
+        
+
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
@@ -122,13 +124,22 @@ public class UserService {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
+        // new user is  active
+        newUser.setActivated(true);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
+        //Associer un rôle au nouvel utilisateur enregistré en fonction du choix fait lors de l'inscription et enregistrer son identifiant et son rôle dans la table user_authority
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-        authorityRepository.findById(AuthoritiesConstants.CANDIDAT).ifPresent(authorities::add);    
+        if (userDTO.getAuthorities() != null && !userDTO.getAuthorities().isEmpty()) {
+            for (String authorityName : userDTO.getAuthorities()) {
+                Authority authority = authorityRepository.findById(authorityName).orElseThrow(() -> new RuntimeException("Authority not found: " + authorityName));
+                authorities.add(authority);
+            }
+        } else {
+            // Par défaut, attribuer le rôle USER si aucun rôle n'est spécifié
+            Authority userAuthority = authorityRepository.findById(AuthoritiesConstants.USER).orElseThrow(() -> new RuntimeException("Authority not found: " + AuthoritiesConstants.USER));
+            authorities.add(userAuthority);
+        }
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
