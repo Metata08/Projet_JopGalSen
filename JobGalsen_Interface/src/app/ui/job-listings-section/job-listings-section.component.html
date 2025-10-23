@@ -12,17 +12,17 @@
         <div class="card h-100 hover-shadow">
           <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
-              <span class="badge bg-secondary">{{ offre.contrat }}</span>
-              <small class="text-muted">{{ offre.dateDePostule }}</small>
+              <span class="badge bg-secondary">{{ offre.type }}</span>
+              <small class="text-muted">{{ offre.postedDate }}</small>
             </div>
-            <h3 class="h5 card-title mb-3">{{ offre.titre }}</h3>
+            <h3 class="h5 card-title mb-3">{{ offre.title }}</h3>
             
             <div class="mb-3">
               <p class="mb-1 text-muted">
-                <i class="bi bi-building me-2"></i>{{ offre.entreprise }}
+                <i class="bi bi-building me-2"></i>{{ offre.company }}
               </p>
               <p class="mb-1 text-muted">
-                <i class="bi bi-geo-alt me-2"></i>{{ offre.localite }}
+                <i class="bi bi-geo-alt me-2"></i>{{ offre.location }}
               </p>
               <p class="mb-0 text-muted">
                 <i class="bi bi-people me-2"></i>{{ offre.experience }} d'expérience
@@ -33,7 +33,7 @@
               {{ offre.description }}
             </p>
 
-            <p class="text-primary fw-bold mb-3">{{ offre.remuneration | currency:'XOF' }}</p>
+            <p class="text-primary fw-bold mb-3">{{ offre.salary | currency:'XOF' }}</p>
 
             <div class="d-grid gap-2">
               <button (click)="handleApply(offre.id)" class="btn btn-primary">
