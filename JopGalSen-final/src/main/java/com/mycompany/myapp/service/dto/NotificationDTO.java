@@ -1,7 +1,7 @@
 package com.mycompany.myapp.service.dto;
 
 import jakarta.persistence.Lob;
-import jakarta.validation.constraints.*;
+// import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 

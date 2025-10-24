@@ -9,4 +9,10 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RecruteurRepository extends JpaRepository<Recruteur, Long> {}
+public interface RecruteurRepository extends JpaRepository<Recruteur, Long> {
+
+  
+    @Query("SELECT COUNT(DISTINCT r.entreprise) FROM Recruteur r")
+    long countDistinctByEntreprise();
+
+}
