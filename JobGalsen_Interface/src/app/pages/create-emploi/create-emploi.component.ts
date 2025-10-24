@@ -168,6 +168,11 @@ export class CreateEmploiComponent {
       return 'Étape ' + step;
   }
 }
+
+naviguerRetour(): void {
+    this.router.navigate(['/recruteur']);
+  }
+
 getExperienceLabel(value: string): string {
   const exp = this.experienceLevels.find(e => e.value === value);
   return exp ? exp.label : '';

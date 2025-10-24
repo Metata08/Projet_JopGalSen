@@ -36,7 +36,7 @@ public class Candidat implements Serializable {
     private String profil;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

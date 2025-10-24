@@ -7,8 +7,11 @@ import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.OffreService;
 import com.mycompany.myapp.service.dto.OffreDTO;
 import com.mycompany.myapp.service.mapper.OffreMapper;
+import java.util.stream.Collectors;
+
 
 import java.util.Optional;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException; 
+
+
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.Offre}.
  */
@@ -110,5 +115,17 @@ public class OffreServiceImpl implements OffreService {
     public void delete(Long id) {
         LOG.debug("Request to delete Offre : {}", id);
         offreRepository.deleteById(id);
+    }
+
+    /**Recuperer les offres par recruteur */
+    @Override
+    @Transactional(readOnly = true)
+    public List<OffreDTO> findByUserId(Long userId) {
+        LOG.debug("Recherche des offres pour userId = {}", userId);
+        List<Offre> offres = offreRepository.findByUserId(userId);
+        LOG.debug("Offres trouvées = {}", offres.size());
+        return offres.stream()
+            .map(offreMapper::toDto)
+            .collect(Collectors.toList());
     }
 }

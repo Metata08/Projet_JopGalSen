@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './recruteur-header.component.css'
 })
 export class RecruteurHeaderComponent {
-
+  
 }

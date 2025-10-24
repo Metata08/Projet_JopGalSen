@@ -4,6 +4,11 @@ import com.mycompany.myapp.service.dto.OffreDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.stream.Collectors;
+import com.mycompany.myapp.domain.Offre;
+import com.mycompany.myapp.repository.OffreRepository;
+import com.mycompany.myapp.service.mapper.OffreMapper;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.Offre}.
@@ -64,4 +69,8 @@ public interface OffreService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**Recuperer les offres par recruteur */
+    //List<OffreDTO> findByRecruteurId(Long recruteurId);
+    List<OffreDTO> findByUserId(Long userId);
 }

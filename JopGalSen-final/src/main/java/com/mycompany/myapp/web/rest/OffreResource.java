@@ -209,4 +209,11 @@ public class OffreResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    /**Recuperer les offres par recruteur */
+    @GetMapping("/recruteur/{recruteurId}")
+    public ResponseEntity<List<OffreDTO>> getOffresByRecruteurId(@PathVariable Long recruteurId) {
+       List<OffreDTO> offres = offreService.findByUserId(recruteurId);
+        return ResponseEntity.ok(offres);
+    }
 }

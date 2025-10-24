@@ -37,4 +37,16 @@ public interface OffreRepository extends OffreRepositoryWithBagRelationships, Jp
 
     @Query("select offre from Offre offre left join fetch offre.recruteur where offre.id =:id")
     Optional<Offre> findOneWithToOneRelationships(@Param("id") Long id);
+
+    /**Recuperer d'abord le user_id en fonction du id de recruteur */
+    @Query("select recruteur.user.id from Recruteur recruteur where recruteur.id =:recruteurId")
+    Long findUserIdByRecruteurId(@Param("recruteurId") Long recruteurId);
+
+    /**Recuperer les offres d'un recruteur */
+
+    @Query("""
+        SELECT o FROM Offre o, Recruteur r
+        WHERE o.recruteur.user.id = r.id AND r.user.id = :userId
+    """)
+    List<Offre> findByUserId(@Param("userId") Long userId);
 }

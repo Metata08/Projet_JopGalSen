@@ -3,22 +3,21 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecruteurHeaderComponent } from '../../ui/recruteur-header/recruteur-header.component';
-import { RecruteurService } from './service/recruteur.service';
-import { Job, Candidate, Stats } from '../../models/job.model';
-
+import { RecruteurService, Offre } from './service/recruteur.service';
 
 @Component({
   selector: 'app-recruteur-dashbord',
   imports: [ CommonModule, FormsModule, ReactiveFormsModule, RecruteurHeaderComponent ],
   templateUrl: './recruteur-dashbord.component.html',
-  styleUrl: './recruteur-dashbord.component.css'
+  styleUrls: ['./recruteur-dashbord.component.css']
 })
 export class RecruteurDashbordComponent implements OnInit {
-  activeTab: string = 'jobs';
-  jobs: Job[] = [];
-  candidates: Candidate[] = [];
-  stats: Stats | null = null;
-  loading = true;
+  ongletActif: string = 'offres';
+  offres: Offre[] = [];
+  candidats: any[] = [];
+  statistiques: any = null;
+  chargement = true;
+  erreur: string | null = null;
 
   constructor(
     private router: Router,
@@ -26,72 +25,158 @@ export class RecruteurDashbordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadData();
+    this.chargerDonnees();
   }
 
-  loadData(): void {
-    this.loading = true;
-    this.recruteurService.getJobs().subscribe(jobs => {
-      this.jobs = jobs;
-      this.checkLoadingComplete();
+  chargerDonnees(): void {
+    this.chargement = true;
+    this.erreur = null;
+
+    let compteurCharge = 0;
+    const totalACharger = 3;
+
+    const verifierChargementComplet = () => {
+      compteurCharge++;
+      if (compteurCharge >= totalACharger) {
+        this.chargement = false;
+      }
+    };
+
+    // Charger les offres
+    this.recruteurService.getOffres().subscribe({
+      next: (offres) => {
+        this.offres = offres;
+        console.log('Offres chargées:', offres);
+        verifierChargementComplet();
+      },
+      error: (err) => {
+        console.error('Erreur offres:', err);
+        this.erreur = 'Erreur lors du chargement des offres';
+        verifierChargementComplet();
+      }
     });
 
-    this.recruteurService.getCandidates().subscribe(candidates => {
-      this.candidates = candidates;
-      this.checkLoadingComplete();
+    // Charger les candidats
+    this.recruteurService.getCandidats().subscribe({
+      next: (candidats) => {
+        this.candidats = candidats;
+        verifierChargementComplet();
+      },
+      error: (err) => {
+        console.error('Erreur candidats:', err);
+        verifierChargementComplet();
+      }
     });
 
-    this.recruteurService.getStats().subscribe(stats => {
-      this.stats = stats;
-      this.checkLoadingComplete();
+    // Charger les statistiques
+    this.recruteurService.getStatistiques().subscribe({
+      next: (stats) => {
+        this.statistiques = stats;
+        verifierChargementComplet();
+      },
+      error: (err) => {
+        console.error('Erreur statistiques:', err);
+        verifierChargementComplet();
+      }
     });
   }
 
-  checkLoadingComplete(): void {
-    if (this.jobs.length > 0 && this.candidates.length > 0 && this.stats) {
-      this.loading = false;
-    }
+  changerOnglet(onglet: string): void {
+    this.ongletActif = onglet;
   }
 
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
-  }
-
-  navigateToCreateJob(): void {
+  naviguerCreerOffre(): void {
     this.router.navigate(['/create-emploi']);
   }
 
-  viewJobDetails(jobId: number): void {
-    this.router.navigate(['/emploi', jobId]);
+  // Créer une offre exemple
+  creerOffreExemple(): void {
+    this.recruteurService.creerOffreExemple().subscribe({
+      next: (offre) => {
+        console.log('Offre créée avec succès:', offre);
+        this.chargerDonnees();
+        this.afficherSucces('Offre créée avec succès !');
+      },
+      error: (error) => {
+        console.error('Erreur création offre:', error);
+        this.erreur = 'Erreur lors de la création de l\'offre';
+      }
+    });
   }
 
-  viewCandidateProfile(candidateId: string): void {
-    this.router.navigate(['/candidat', candidateId]);
+  // Créer une offre mobile
+  creerOffreMobile(): void {
+    this.recruteurService.creerOffreMobile().subscribe({
+      next: (offre) => {
+        console.log('Offre mobile créée:', offre);
+        this.chargerDonnees();
+        this.afficherSucces('Offre mobile créée avec succès !');
+      },
+      error: (error) => {
+        console.error('Erreur création offre mobile:', error);
+        this.erreur = 'Erreur lors de la création de l\'offre mobile';
+      }
+    });
   }
 
-  getStatusClass(status: string): string {
-    const statusClasses: Record<string, string> = {
-      active: 'badge bg-success',
-      draft: 'badge bg-warning',
-      closed: 'badge bg-secondary',
-      pending: 'badge bg-warning',
-      reviewed: 'badge bg-info',
-      accepted: 'badge bg-success',
-      rejected: 'badge bg-danger'
+  // Créer une offre design
+  creerOffreDesign(): void {
+    this.recruteurService.creerOffreDesign().subscribe({
+      next: (offre) => {
+        console.log('Offre design créée:', offre);
+        this.chargerDonnees();
+        this.afficherSucces('Offre design créée avec succès !');
+      },
+      error: (error) => {
+        console.error('Erreur création offre design:', error);
+        this.erreur = 'Erreur lors de la création de l\'offre design';
+      }
+    });
+  }
+
+  voirDetailsOffre(offreId: number): void {
+    this.router.navigate(['/offre', offreId]);
+  }
+
+  voirProfilCandidat(candidatId: string): void {
+    this.router.navigate(['/candidat', candidatId]);
+  }
+
+  getClasseStatut(statut: string): string {
+    const classesStatut: Record<string, string> = {
+      'actif': 'badge bg-success',
+      'brouillon': 'badge bg-warning',
+      'fermé': 'badge bg-secondary',
+      'en_attente': 'badge bg-warning',
+      'examiné': 'badge bg-info',
+      'accepté': 'badge bg-success',
+      'refusé': 'badge bg-danger'
     };
-    return statusClasses[status] || 'badge bg-secondary';
+    return classesStatut[statut] || 'badge bg-secondary';
   }
 
-  getStatusText(status: string): string {
-    const statusTexts: Record<string, string> = {
-      active: 'Active',
-      draft: 'Brouillon',
-      closed: 'Fermée',
-      pending: 'En attente',
-      reviewed: 'Examiné',
-      accepted: 'Accepté',
-      rejected: 'Refusé'
+  getTexteStatut(statut: string): string {
+    const textesStatut: Record<string, string> = {
+      'actif': 'Active',
+      'brouillon': 'Brouillon',
+      'fermé': 'Fermée',
+      'en_attente': 'En attente',
+      'examiné': 'Examiné',
+      'accepté': 'Accepté',
+      'refusé': 'Refusé'
     };
-    return statusTexts[status] || status;
+    return textesStatut[statut] || statut;
+  }
+
+  formaterSalaire(remuneration: number): string {
+    return this.recruteurService.formaterSalaire(remuneration);
+  }
+
+  private afficherSucces(message: string): void {
+    alert(message);
+  }
+
+  rechargerDonnees(): void {
+    this.chargerDonnees();
   }
 }

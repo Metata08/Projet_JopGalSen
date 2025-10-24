@@ -39,6 +39,7 @@ public class Candidature implements Serializable {
     private Offre offre;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "candidat_id", referencedColumnName = "user_id")
     @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
     private Candidat candidat;
 

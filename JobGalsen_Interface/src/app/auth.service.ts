@@ -23,20 +23,13 @@ interface User {
 interface LoginResponse {
   idToken: string;
   user: User;
-  role: string; // rôle reçu dans la réponse explicite
+  role: string;
 }
 
 interface LoginData {
   username: string;
   password: string;
   rememberMe: boolean;
-}
-
-interface RegisterData {
-  email: string;
-  password: string;
-  name?: string;
-  role?: UserRole;
 }
 
 @Injectable({
@@ -47,6 +40,7 @@ export class AuthService {
   private registerUrl = 'http://localhost:8080/api/register';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private userIdSubject = new BehaviorSubject<number | null>(null);
 
   constructor(private http: HttpClient, private router: Router) {
     this.loadUserFromStorage();
@@ -59,6 +53,8 @@ export class AuthService {
         this.storeToken(response.idToken, rememberMe);
         const userWithRole = this.addRoleToUser(response.user, response.role);
         this.currentUserSubject.next(userWithRole);
+        // Stocker les informations de l'utilisateur
+        this.userIdSubject.next(userWithRole.id); // Stocker l'ID utilisateur
         this.saveUserToStorage(userWithRole);
       }),
       map(response => this.addRoleToUser(response.user, response.role)),
@@ -70,50 +66,48 @@ export class AuthService {
   }
 
   register(userData: {
-  login: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  imageUrl?: string;
-  langKey?: string;
-  authorities?: string[];
-  password: string;
-}): Observable<User | null> {
-  // Préparer l'objet à envoyer avec tous les champs requis
-  const payload = {
-    id: 0,                               // id à 0 pour nouvelle inscription
-    login: userData.login,
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    email: userData.email,
-    imageUrl: userData.imageUrl || '',
-    activated: true,                     // activation directe
-    langKey: userData.langKey || 'fr',
-    createdBy: 'system',                 // ou l’utilisateur courant si possible
-    createdDate: new Date().toISOString(),
-    lastModifiedBy: 'system',
-    lastModifiedDate: new Date().toISOString(),
-    authorities: userData.authorities || ['ROLE_USER'],
-    password: userData.password
-  };
+    login: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl?: string;
+    langKey?: string;
+    authorities?: string[];
+    password: string;
+  }): Observable<User | null> {
+    const payload = {
+      id: 0,
+      login: userData.login,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      imageUrl: userData.imageUrl || '',
+      activated: true,
+      langKey: userData.langKey || 'fr',
+      createdBy: 'system',
+      createdDate: new Date().toISOString(),
+      lastModifiedBy: 'system',
+      lastModifiedDate: new Date().toISOString(),
+      authorities: userData.authorities || ['ROLE_USER'],
+      password: userData.password
+    };
 
-  return this.http.post<LoginResponse>(this.registerUrl, payload).pipe(
-    tap(response => {
-      const userWithRole = this.addRoleToUser(response.user, response.role);
-      this.currentUserSubject.next(userWithRole);
-      this.saveUserToStorage(userWithRole);
-    }),
-    map(response => this.addRoleToUser(response.user, response.role)),
-    catchError(error => {
-      this.clearAuthData();
-      return throwError(() => error);
-    })
-  );
-}
-
+    return this.http.post<LoginResponse>(this.registerUrl, payload).pipe(
+      tap(response => {
+        const userWithRole = this.addRoleToUser(response.user, response.role);
+        this.currentUserSubject.next(userWithRole);
+        this.userIdSubject.next(userWithRole.id); // Stocker l'ID utilisateur
+        this.saveUserToStorage(userWithRole);
+      }),
+      map(response => this.addRoleToUser(response.user, response.role)),
+      catchError(error => {
+        this.clearAuthData();
+        return throwError(() => error);
+      })
+    );
+  }
 
   private addRoleToUser(user: User, role: string): User {
-    // Utilise le role fourni par l'API (string comme ROLE_USER), mappe vers UserRole si besoin
     switch (role) {
       case 'ROLE_ADMIN':
         user.role = 'admin';
@@ -135,12 +129,22 @@ export class AuthService {
     this.router.navigate(['/auth']);
   }
 
+  // Getters pour l'utilisateur courant
   get currentUser$(): Observable<User | null> {
     return this.currentUserSubject.asObservable();
   }
 
   get currentUserValue(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  // Getters pour l'ID utilisateur
+  get currentUserId$(): Observable<number | null> {
+    return this.userIdSubject.asObservable();
+  }
+
+  get currentUserIdValue(): number | null {
+    return this.userIdSubject.value;
   }
 
   get token(): string | null {
@@ -159,22 +163,29 @@ export class AuthService {
   private saveUserToStorage(user: User): void {
     const storage = localStorage.getItem('auth_token') ? localStorage : sessionStorage;
     storage.setItem('current_user', JSON.stringify(user));
+    storage.setItem('user_id', user.id.toString()); // Stocker l'ID séparément
   }
 
   private clearAuthData(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('current_user');
+    localStorage.removeItem('user_id');
     sessionStorage.removeItem('auth_token');
     sessionStorage.removeItem('current_user');
+    sessionStorage.removeItem('user_id');
     this.currentUserSubject.next(null);
+    this.userIdSubject.next(null);
   }
 
   private loadUserFromStorage(): void {
     const userJson = localStorage.getItem('current_user') || sessionStorage.getItem('current_user');
-    if (userJson) {
+    const userId = localStorage.getItem('user_id') || sessionStorage.getItem('user_id');
+    
+    if (userJson && userId) {
       try {
         const user = JSON.parse(userJson) as User;
         this.currentUserSubject.next(user);
+        this.userIdSubject.next(parseInt(userId, 10));
       } catch (e) {
         this.clearAuthData();
       }
@@ -194,5 +205,21 @@ export class AuthService {
       '': '/auth'
     };
     this.router.navigate([routes[role]]);
+  }
+
+  // Méthode pour rafraîchir les données utilisateur si nécessaire
+  refreshUserData(): void {
+    const userJson = localStorage.getItem('current_user') || sessionStorage.getItem('current_user');
+    const userId = localStorage.getItem('user_id') || sessionStorage.getItem('user_id');
+    
+    if (userJson && userId) {
+      try {
+        const user = JSON.parse(userJson) as User;
+        this.currentUserSubject.next(user);
+        this.userIdSubject.next(parseInt(userId, 10));
+      } catch (e) {
+        this.clearAuthData();
+      }
+    }
   }
 }

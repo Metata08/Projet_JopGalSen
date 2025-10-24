@@ -14,6 +14,7 @@ export interface Job {
   postedDate: string;
   urgent?: boolean;
   skills: string[];
+  recruiterId?: string;
 }
 
 export interface Candidate {

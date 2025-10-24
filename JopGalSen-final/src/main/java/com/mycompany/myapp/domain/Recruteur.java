@@ -20,6 +20,7 @@ public class Recruteur implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    
 
     @Column(name = "entreprise")
     private String entreprise;
@@ -28,7 +29,7 @@ public class Recruteur implements Serializable {
     private String tel;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

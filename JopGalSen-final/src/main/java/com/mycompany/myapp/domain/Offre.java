@@ -26,6 +26,7 @@ public class Offre implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    
 
     @NotNull
     @Column(name = "titre", nullable = false)
@@ -71,6 +72,7 @@ public class Offre implements Serializable {
     private TypeContrat contrat;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recruteur_id", referencedColumnName = "user_id") 
     @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
     private Recruteur recruteur;
 
